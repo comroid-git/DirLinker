@@ -6,8 +6,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
+using Windows.ApplicationModel;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -26,20 +29,8 @@ namespace DirLinker
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        public static readonly FileInfo ConfigFile;
+        public readonly StorageFolder StorageFolder;
         private bool _debugExpanded;
-
-        static MainPage()
-        {
-            var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "org.comroid");
-            var conf = Path.Combine(dir, "dirLinker.json");
-            ConfigFile = new FileInfo(conf);
-            var dirInf = new DirectoryInfo(dir);
-            Debug.WriteLine(dir);
-            Debug.WriteLine(dirInf);
-            if (!dirInf.Exists)
-                dirInf.Create();
-        }
 
         public Configuration Config { get; private set; }
 
@@ -48,6 +39,7 @@ namespace DirLinker
             DataContext = this;
             InitializeComponent();
             SetWindowSize(840, 600);
+            StorageFolder = ApplicationData.Current.LocalFolder;
 
             try
             {
@@ -129,26 +121,26 @@ namespace DirLinker
             dirObj.Links.Add(linkObj);
         }
 
-        private void LoadConfig()
+        private async Task<StorageFile> GetConfig()
         {
-            if (!ConfigFile.Exists)
-            {
-                Config = CreateDefaultConfig();
-                SaveConfig();
-            }
-            else
-            {
-                string data = File.ReadAllText(ConfigFile.FullName);
-                Config = JsonConvert.DeserializeObject<Configuration>(data);
-            }
+            return await StorageFolder.GetFileAsync("dirLinker.json")
+                   ?? await StorageFolder.CreateFileAsync("dirLinker.json");
+        }
+
+        private async void LoadConfig()
+        {
+            StorageFile config = await GetConfig();
+            string data = await FileIO.ReadTextAsync(config);
+            Config = JsonConvert.DeserializeObject<Configuration>(data) ?? CreateDefaultConfig();
 
             if (Config == null)
                 throw new InvalidDataException("Could not load configuration");
         }
 
-        private void SaveConfig()
+        private async void SaveConfig()
         {
-            File.WriteAllText(ConfigFile.FullName, JsonConvert.SerializeObject(Config));
+            StorageFile config = await GetConfig();
+            await FileIO.WriteTextAsync(config, JsonConvert.SerializeObject(Config));
         }
 
         private Configuration CreateDefaultConfig()
