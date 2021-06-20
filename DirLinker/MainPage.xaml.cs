@@ -27,6 +27,7 @@ namespace DirLinker
     public sealed partial class MainPage : Page
     {
         public static readonly FileInfo ConfigFile;
+        private bool _debugExpanded;
 
         static MainPage()
         {
@@ -39,20 +40,30 @@ namespace DirLinker
         public MainPage()
         {
             DataContext = this;
-            this.InitializeComponent();
-            ApplicationView.PreferredLaunchViewSize = new Size(840, 500);
-            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
+            InitializeComponent();
+            SetWindowSize(840, 600);
 
             try
             {
                 LoadConfig();
             } catch (Exception e)
             {
-                Debug.WriteLine("Could not load configuration: " + e);
+                WriteLine("Could not load configuration: " + e);
             }
         }
 
-        internal void ApplyConfig()
+        internal void WriteLine(object line)
+        {
+            DebugOutput.Text += '\n' + line.ToString();
+        }
+
+        private void SetWindowSize(int width, int height)
+        {
+            ApplicationView.PreferredLaunchViewSize = new Size(width, height);
+            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.Auto;
+        }
+
+        private void ApplyConfig()
         {
             if (Config.ConfigVersion != 1)
                 throw new InvalidDataException("Unknown configuration Version");
@@ -76,7 +87,34 @@ namespace DirLinker
             }
         }
 
-        internal void LoadConfig()
+        private void ToggleDebugExpanded()
+        {
+            var offset = (_debugExpanded = !_debugExpanded) ? 180 : 0;
+            DebugRow.Height = new GridLength(offset);
+            SetWindowSize((int)ApplicationView.PreferredLaunchViewSize.Width, (int)(ApplicationView.PreferredLaunchViewSize.Height + offset));
+        }
+
+        private void AddLinkFromInput()
+        {
+            var linkDir = new DirectoryInfo(LinkDirInput.Text);
+            var linkName = LinkNameInput.Text;
+            var link = new DirectoryInfo(Path.Combine(linkDir.FullName, linkName));
+            var targetDir = new DirectoryInfo(TargetDirInput.Text);
+
+            if (!linkDir.Exists)
+                throw new InvalidOperationException("Link parent directory is missing");
+            if (link.Exists)
+                throw new InvalidOperationException("Link target already exists");
+            if (!targetDir.Exists)
+                throw new InvalidOperationException("Link target directory is missing");
+
+            var dirObj = Config.LinkDirectories.Find(it => it.Directory == linkDir.FullName)
+                ?? new Configuration.LinkDir { Dir = linkDir, Links = new List<Configuration.LinkBlob>() };
+            var linkObj = new Configuration.LinkBlob { LinkName = linkName, TargetDir = targetDir };
+            dirObj.Links.Add(linkObj);
+        }
+
+        private void LoadConfig()
         {
             if (!ConfigFile.Exists)
             {
@@ -90,7 +128,7 @@ namespace DirLinker
             }
         }
 
-        internal void SaveConfig()
+        private void SaveConfig()
         {
             File.WriteAllText(ConfigFile.FullName, JsonConvert.SerializeObject(Config));
         }
@@ -103,7 +141,36 @@ namespace DirLinker
 
         private void Button_ApplyConfig(object sender, RoutedEventArgs e)
         {
-            ApplyConfig();
+            try
+            {
+                ApplyConfig();
+            } catch (Exception e)
+            {
+                WriteLine("Could not apply Configuration: " + e);
+            }
+        }
+        
+        private void Button_ExpandDebug(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ToggleDebugExpanded();
+            } catch (Exception e)
+            {
+                WriteLine("Could not toggle debug window: " + e);
+            }
+        }
+
+        private void Button_AddLink(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                AddLinkFromInput();
+            }
+            catch (Exception e)
+            {
+                WriteLine("Could not toggle debug window: " + e);
+            }
         }
     }
 }
