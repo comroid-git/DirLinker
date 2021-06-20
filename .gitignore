@@ -611,3 +611,4 @@ fabric.properties
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,visualstudiocode,csharp,dotnetcore,rider
 
 .vs/**
+.idea/**
