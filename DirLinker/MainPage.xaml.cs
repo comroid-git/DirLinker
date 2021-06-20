@@ -31,8 +31,12 @@ namespace DirLinker
 
         static MainPage()
         {
-            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "org.comroid/dirLinker.json");
-            ConfigFile = new FileInfo(path);
+            var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "org.comroid");
+            var conf = Path.Combine(dir, "dirLinker.json");
+            ConfigFile = new FileInfo(conf);
+            Debug.WriteLine(dir);
+            if (!new DirectoryInfo(dir).Exists)
+                Directory.CreateDirectory(dir);
         }
 
         public Configuration Config { get; private set; }
@@ -54,6 +58,7 @@ namespace DirLinker
 
         internal void WriteLine(object line)
         {
+            Debug.WriteLine("Debug Line: " + line);
             DebugOutput.Text += '\n' + line.ToString();
         }
 
@@ -126,6 +131,9 @@ namespace DirLinker
                 string data = File.ReadAllText(ConfigFile.FullName);
                 Config = JsonConvert.DeserializeObject<Configuration>(data);
             }
+
+            if (Config == null)
+                throw new InvalidDataException("Could not load configuration");
         }
 
         private void SaveConfig()
@@ -144,9 +152,9 @@ namespace DirLinker
             try
             {
                 ApplyConfig();
-            } catch (Exception e)
+            } catch (Exception ex)
             {
-                WriteLine("Could not apply Configuration: " + e);
+                WriteLine("Could not apply Configuration: " + ex);
             }
         }
         
@@ -155,9 +163,9 @@ namespace DirLinker
             try
             {
                 ToggleDebugExpanded();
-            } catch (Exception e)
+            } catch (Exception ex)
             {
-                WriteLine("Could not toggle debug window: " + e);
+                WriteLine("Could not toggle debug window: " + ex);
             }
         }
 
@@ -167,9 +175,9 @@ namespace DirLinker
             {
                 AddLinkFromInput();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                WriteLine("Could not toggle debug window: " + e);
+                WriteLine("Could not toggle debug window: " + ex);
             }
         }
     }
