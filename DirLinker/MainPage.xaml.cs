@@ -54,6 +54,7 @@ namespace DirLinker
         {
             Debug.WriteLine("Debug Line: " + line);
             DebugOutput.Text += '\n' + line.ToString();
+            DebugScroll.ChangeView(0, DebugScroll.ScrollableHeight, 1);
         }
 
         private void SetWindowSize(int width, int height)

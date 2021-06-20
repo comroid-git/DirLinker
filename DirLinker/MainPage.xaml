@@ -44,8 +44,10 @@
             <SymbolIcon Symbol="ShowBcc" />
         </Button>
 
-        <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="DebugOutput">
-            Output is printed here...
-        </TextBlock>
+        <ScrollViewer Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="DebugScroll" >
+            <TextBlock Name="DebugOutput">
+                Output is printed here...
+            </TextBlock>
+        </ScrollViewer>
     </Grid>
 </Page>
