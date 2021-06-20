@@ -1,0 +1,51 @@
+﻿<Window x:Class="DirLinkerWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DirLinkerWPF"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="15*" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="0" x:Name="DebugRow" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="40" />
+        </Grid.ColumnDefinitions>
+
+        <TextBox Grid.Row="0" Grid.Column="0" PlaceholderText="Link Directory" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="LinkDirInput" />
+        <TextBox Grid.Row="0" Grid.Column="1" PlaceholderText="Link Name" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="LinkNameInput" />
+        <TextBox Grid.Row="0" Grid.Column="2" PlaceholderText="Target Directory" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="TargetDirInput" />
+        <Button Grid.Row="0" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Button_AddLink">
+            <SymbolIcon Symbol="Add" />
+        </Button>
+
+        <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <StackPanel Orientation="Vertical">
+            </StackPanel>
+        </ScrollViewer>
+
+        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Button_ApplyConfig">
+            <StackPanel Orientation="Horizontal">
+                <SymbolIcon Symbol="Accept" />
+                <TextBlock Margin="10,0" Text="Apply Configuration" />
+            </StackPanel>
+        </Button>
+        <Button Grid.Row="2" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Button_ExpandDebug">
+            <SymbolIcon Symbol="ShowBcc" />
+        </Button>
+
+        <ScrollViewer Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="DebugScroll" >
+            <TextBlock Name="DebugOutput">
+                Output is printed here...
+            </TextBlock>
+        </ScrollViewer>
+    </Grid>
+</Window>
