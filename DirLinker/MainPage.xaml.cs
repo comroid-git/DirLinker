@@ -59,6 +59,7 @@ namespace DirLinker
 
         private void SetWindowSize(int width, int height)
         {
+            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.Auto;
             ApplicationView.PreferredLaunchViewSize = new Size(width, height);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
         }
