@@ -78,16 +78,24 @@ namespace DirLinker
             {
                 var parentDir = it.Dir;
 
-                if (!parentDir.Exists)
-                    continue; // todo: log skipped element
+                if (!parentDir.Exists) {
+                    WriteLine($"Missing link base directory: {parentDir}; skipping entry");
+                    continue;
+                }
 
                 foreach (var blob in it.Links)
                 {
                     var linkPath = Path.Combine(parentDir.FullName, blob.LinkName);
                     var targetDir = new DirectoryInfo(blob.TargetDirectory);
 
-                    if (!targetDir.Exists)
-                        continue; // todo: log skipped element
+                    if (!targetDir.Exists) {
+                        WriteLine($"Missing link target directory: {targetDir}; skipping entry");
+                        continue;
+                    }
+                    if (!Directory.Exists(linkPath)) {
+                        WriteLine($"Link directory already exists: {linkPath}; skipping entry");
+                        continue;
+                    }
 
                     targetDir.CreateSymbolicLink(linkPath);
                 }
