@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31410.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DirLinker", "DirLinker\DirLinker.csproj", "{D61E2C2A-22C8-4810-940E-50A4510BE77C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DirLinkerUWP", "DirLinker\DirLinkerUWP.csproj", "{D61E2C2A-22C8-4810-940E-50A4510BE77C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
