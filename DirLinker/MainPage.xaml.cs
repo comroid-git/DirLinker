@@ -110,11 +110,11 @@ namespace DirLinker
             var targetDir = new DirectoryInfo(TargetDirInput.Text);
 
             if (!linkDir.Exists)
-                throw new InvalidOperationException("Link parent directory is missing");
+                throw new InvalidOperationException("Link parent directory is missing: " + linkDir.FullName);
             if (link.Exists)
-                throw new InvalidOperationException("Link target already exists");
+                throw new InvalidOperationException("Link target already exists: " + link.FullName);
             if (!targetDir.Exists)
-                throw new InvalidOperationException("Link target directory is missing");
+                throw new InvalidOperationException("Link target directory is missing: " + targetDir.FullName);
 
             var dirObj = Config.LinkDirectories.Find(it => it.Directory == linkDir.FullName)
                 ?? new Configuration.LinkDir { Dir = linkDir, Links = new List<Configuration.LinkBlob>() };
@@ -180,7 +180,7 @@ namespace DirLinker
             }
             catch (Exception ex)
             {
-                WriteLine("Could not toggle debug window: " + ex);
+                WriteLine("Could not add link: " + ex);
             }
         }
     }
