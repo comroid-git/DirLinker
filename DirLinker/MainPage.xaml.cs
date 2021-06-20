@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -22,9 +24,69 @@ namespace DirLinker
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        public static readonly FileInfo ConfigFile;
+
+        static MainPage()
+        {
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "comroid/dirLinker.json");
+            ConfigFile = new FileInfo(path);
+        }
+
+        public Configuration Config { get; private set; }
+
         public MainPage()
         {
-            this.InitializeComponent();
+            DataContext = this;
+            InitializeComponent();
+
+            try
+            {
+                LoadConfig();
+            } catch (Exception e)
+            {
+                Debug.WriteLine("Could not load configuration: " + e);
+            }
+        }
+
+        internal void SubmitConfig()
+        {
+            if (Config.ConfigVersion != 1)
+                throw new InvalidDataException("Unknown configuration Version");
+            foreach (var it in Config.LinkDirectories)
+            {
+                var parentDir = it.Dir;
+
+                foreach (var blob in it.Links)
+                {
+                    var linkDir = new DirectoryInfo(Path.Combine(it.Directory, blob.LinkName));
+                    var targetDir = new DirectoryInfo(blob.TargetDirectory);
+                }
+            }
+        }
+
+        internal void LoadConfig()
+        {
+            if (!ConfigFile.Exists)
+            {
+                Config = CreateDefaultConfig();
+                SaveConfig();
+            }
+            else
+            {
+                string data = File.ReadAllText(ConfigFile.FullName);
+                Config = JsonConvert.DeserializeObject<Configuration>(data);
+            }
+        }
+
+        internal void SaveConfig()
+        {
+            File.WriteAllText(ConfigFile.FullName, JsonConvert.SerializeObject(Config));
+        }
+
+        private Configuration CreateDefaultConfig()
+        {
+            var defaults = new Configuration();
+            return defaults;
         }
     }
 }

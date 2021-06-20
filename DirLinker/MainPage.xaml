@@ -14,6 +14,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
             <RowDefinition Height="10*" />
+            <RowDefinition Height="40" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
@@ -22,11 +23,21 @@
             <ColumnDefinition Width="40" />
         </Grid.ColumnDefinitions>
 
-        <TextBox Grid.Row="0" Grid.Column="0" PlaceholderText="Link Directory" />
-        <TextBox Grid.Row="0" Grid.Column="1" PlaceholderText="Link Name" />
-        <TextBox Grid.Row="0" Grid.Column="2" PlaceholderText="Target Directory" />
-        <Button Grid.Row="0" Grid.Column="3" Width="40" Height="40">
+        <TextBox Grid.Row="0" Grid.Column="0" PlaceholderText="Link Directory" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+        <TextBox Grid.Row="0" Grid.Column="1" PlaceholderText="Link Name" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+        <TextBox Grid.Row="0" Grid.Column="2" PlaceholderText="Target Directory" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+        <Button Grid.Row="0" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <SymbolIcon Symbol="Accept" />
+        </Button>
+
+        <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        </ScrollViewer>
+
+        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <StackPanel Orientation="Horizontal">
+                <SymbolIcon Symbol="Accept" />
+                <TextBlock Margin="10,0" Text="Apply Configuration" />
+            </StackPanel>
         </Button>
     </Grid>
 </Page>
