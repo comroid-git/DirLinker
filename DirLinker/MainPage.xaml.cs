@@ -28,7 +28,7 @@ namespace DirLinker
 
         static MainPage()
         {
-            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "comroid/dirLinker.json");
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "org.comroid/dirLinker.json");
             ConfigFile = new FileInfo(path);
         }
 
@@ -37,7 +37,7 @@ namespace DirLinker
         public MainPage()
         {
             DataContext = this;
-            InitializeComponent();
+            this.InitializeComponent();
 
             try
             {

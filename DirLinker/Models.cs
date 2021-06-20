@@ -58,25 +58,4 @@ namespace DirLinker
             }
         }
     }
-
-    public sealed class LinkMaker
-    {
-        public DirectoryInfo LinkName;
-        public DirectoryInfo LinkTarget;
-
-        public void MakeLink() {
-            if (LinkName == null || LinkTarget == null)
-                throw new InvalidOperationException("Insufficient parameters");
-
-            string sourceDrive = Path.GetPathRoot(LinkName.GetFullPath());
-            string targetDrive = Path.GetPathRoot(LinkTarget.GetFullPath());
-
-            /*
-            if (sourceDrive != targetDrive)
-                throw new InvalidOperationException("same drive");
-            */
-
-            LinkTarget.CreateSymbolicLink(LinkTarget.GetFullPath()));
-        }
-    }
 }

@@ -6,8 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Width="700"
-    Height="500" MinHeight="200"
+    Width="840"
+    Height="500"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
@@ -27,10 +27,12 @@
         <TextBox Grid.Row="0" Grid.Column="1" PlaceholderText="Link Name" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
         <TextBox Grid.Row="0" Grid.Column="2" PlaceholderText="Target Directory" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
         <Button Grid.Row="0" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <SymbolIcon Symbol="Accept" />
+            <SymbolIcon Symbol="Add" />
         </Button>
 
         <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <StackPanel Orientation="Vertical">
+            </StackPanel>
         </ScrollViewer>
 
         <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
