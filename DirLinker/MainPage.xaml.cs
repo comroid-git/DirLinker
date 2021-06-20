@@ -34,9 +34,11 @@ namespace DirLinker
             var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "org.comroid");
             var conf = Path.Combine(dir, "dirLinker.json");
             ConfigFile = new FileInfo(conf);
+            var dirInf = new DirectoryInfo(dir);
             Debug.WriteLine(dir);
-            if (!new DirectoryInfo(dir).Exists)
-                Directory.CreateDirectory(dir);
+            Debug.WriteLine(dirInf);
+            if (!dirInf.Exists)
+                dirInf.Create();
         }
 
         public Configuration Config { get; private set; }
