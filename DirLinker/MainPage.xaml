@@ -40,7 +40,7 @@
                 <TextBlock Margin="10,0" Text="Apply Configuration" />
             </StackPanel>
         </Button>
-        <Button Grid.Row="2" Grid.Column="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Button_ExpandDebug">
+        <Button Grid.Row="2" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Button_ExpandDebug">
             <SymbolIcon Symbol="ShowBcc" />
         </Button>
 
