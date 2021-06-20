@@ -10,7 +10,7 @@
     Height="500"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
             <RowDefinition Height="10*" />
@@ -35,7 +35,7 @@
             </StackPanel>
         </ScrollViewer>
 
-        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Button_ApplyConfig">
             <StackPanel Orientation="Horizontal">
                 <SymbolIcon Symbol="Accept" />
                 <TextBlock Margin="10,0" Text="Apply Configuration" />

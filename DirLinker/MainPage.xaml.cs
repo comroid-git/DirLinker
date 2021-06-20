@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SymbolicLinkSupport;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -38,6 +40,8 @@ namespace DirLinker
         {
             DataContext = this;
             this.InitializeComponent();
+            ApplicationView.PreferredLaunchViewSize = new Size(840, 500);
+            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
 
             try
             {
@@ -48,7 +52,7 @@ namespace DirLinker
             }
         }
 
-        internal void SubmitConfig()
+        internal void ApplyConfig()
         {
             if (Config.ConfigVersion != 1)
                 throw new InvalidDataException("Unknown configuration Version");
@@ -56,10 +60,18 @@ namespace DirLinker
             {
                 var parentDir = it.Dir;
 
+                if (!parentDir.Exists)
+                    continue; // todo: log skipped element
+
                 foreach (var blob in it.Links)
                 {
-                    var linkDir = new DirectoryInfo(Path.Combine(it.Directory, blob.LinkName));
+                    var linkPath = Path.Combine(parentDir.FullName, blob.LinkName);
                     var targetDir = new DirectoryInfo(blob.TargetDirectory);
+
+                    if (!targetDir.Exists)
+                        continue; // todo: log skipped element
+
+                    targetDir.CreateSymbolicLink(linkPath);
                 }
             }
         }
@@ -87,6 +99,11 @@ namespace DirLinker
         {
             var defaults = new Configuration();
             return defaults;
+        }
+
+        private void Button_ApplyConfig(object sender, RoutedEventArgs e)
+        {
+            ApplyConfig();
         }
     }
 }
