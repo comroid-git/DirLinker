@@ -10,14 +10,6 @@ using System.Threading.Tasks;
 
 namespace DirLinker
 {
-    internal static class Models
-    {
-        public static string GetFullPath(this DirectoryInfo it)
-        {
-            return Path.GetFullPath(it.ToString());
-        }
-    }
-
     public class Configuration
     {
         [JsonProperty]
