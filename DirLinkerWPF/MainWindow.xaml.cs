@@ -5,6 +5,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 using Newtonsoft.Json;
 using SymbolicLinkSupport;
 
@@ -15,18 +17,24 @@ namespace DirLinkerWPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        public const int WindowHeight = 600;
+        public const int WindowWidth = 840;
         public readonly string DataDir;
         public readonly string ConfigFile;
-        public readonly string ConfigFile;
-        private bool _debugExpanded;
-
         public Configuration Config { get; private set; }
+
+        private bool _debugExpanded;
 
         public MainWindow()
         {
             DataContext = this;
-            SetWindowSize(840, 600);
+            Height = WindowHeight;
+            Width = WindowWidth;
+            ResizeMode = ResizeMode.CanMinimize;
             DataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "org.comroid");
+            var dir = new DirectoryInfo(DataDir);
+            if (!dir.Exists) 
+                dir.Create();
             ConfigFile = Path.Combine(DataDir, "dirLinker.json");
 
             try
@@ -42,8 +50,8 @@ namespace DirLinkerWPF
         internal void WriteLine(object line)
         {
             Debug.WriteLine("Debug Line: " + line);
-            DebugOutput.Text += '\n' + line.ToString();
-            DebugScroll.ChangeView(0, DebugScroll.ScrollableHeight, 1);
+            //DebugOutput.Text += '\n' + line.ToString();
+            //DebugScroll.ChangeView(0, DebugScroll.ScrollableHeight, 1);
         }
         
         private void ApplyConfig()
@@ -85,7 +93,8 @@ namespace DirLinkerWPF
         {
             var offset = (_debugExpanded = !_debugExpanded) ? 180 : 0;
             DebugRow.Height = new GridLength(offset);
-            SetWindowSize((int)ApplicationView.PreferredLaunchViewSize.Width, (int)(ApplicationView.PreferredLaunchViewSize.Height + offset));
+            Height = WindowHeight + offset;
+            Width = WindowHeight + offset;
         }
 
         private void AddLinkFromInput()
@@ -108,26 +117,18 @@ namespace DirLinkerWPF
             dirObj.Links.Add(linkObj);
         }
 
-        private async Task<StorageFile> GetConfig()
+        private void LoadConfig()
         {
-            return await StorageFolder.GetFileAsync("dirLinker.json")
-                   ?? await StorageFolder.CreateFileAsync("dirLinker.json");
-        }
-
-        private async void LoadConfig()
-        {
-            StorageFile config = await GetConfig();
-            string data = await FileIO.ReadTextAsync(config);
+            string data = File.ReadAllText(ConfigFile);
             Config = JsonConvert.DeserializeObject<Configuration>(data) ?? CreateDefaultConfig();
 
             if (Config == null)
                 throw new InvalidDataException("Could not load configuration");
         }
 
-        private async void SaveConfig()
+        private void SaveConfig()
         {
-            StorageFile config = await GetConfig();
-            await FileIO.WriteTextAsync(config, JsonConvert.SerializeObject(Config));
+            File.WriteAllText(ConfigFile, JsonConvert.SerializeObject(Config));
         }
 
         private Configuration CreateDefaultConfig()
@@ -170,6 +171,51 @@ namespace DirLinkerWPF
             {
                 WriteLine("Could not add link: " + ex);
             }
+        }
+
+        // taken from https://stackoverflow.com/questions/636383/how-can-i-find-wpf-controls-by-name-or-type
+        public static T FindChild<T>(DependencyObject parent, string childName)
+            where T : DependencyObject
+        {
+            // Confirm parent and childName are valid. 
+            if (parent == null) return null;
+
+            T foundChild = null;
+
+            int childrenCount = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < childrenCount; i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                // If the child is not of the request child type child
+                T childType = child as T;
+                if (childType == null)
+                {
+                    // recursively drill down the tree
+                    foundChild = FindChild<T>(child, childName);
+
+                    // If the child is found, break so we do not overwrite the found child. 
+                    if (foundChild != null) break;
+                }
+                else if (!string.IsNullOrEmpty(childName))
+                {
+                    var frameworkElement = child as FrameworkElement;
+                    // If the child's name is set for search
+                    if (frameworkElement != null && frameworkElement.Name == childName)
+                    {
+                        // if the child's name is of the request name
+                        foundChild = (T)child;
+                        break;
+                    }
+                }
+                else
+                {
+                    // child element found.
+                    foundChild = (T)child;
+                    break;
+                }
+            }
+
+            return foundChild;
         }
     }
 }
