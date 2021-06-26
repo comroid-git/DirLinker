@@ -24,9 +24,6 @@ namespace DirLinkerWPF
         public readonly string DataDir;
         public readonly string ConfigFile;
         public Configuration Config { get; private set; }
-        private DebugOutput _debugOutput;
-        private bool _debugExpanded;
-        private string _debugBacklog = "";
 
         public MainWindow()
         {
@@ -45,7 +42,7 @@ namespace DirLinkerWPF
             }
             catch (Exception e)
             {
-                WriteLine("Could not load configuration: " + e);
+                PromptLine("Could not load configuration: " + e);
             }
         }
 
@@ -59,7 +56,7 @@ namespace DirLinkerWPF
 
                 if (!parentDir.Exists)
                 {
-                    WriteLine($"Missing link base directory: {parentDir}; skipping entry");
+                    PromptLine($"Missing link base directory: {parentDir}; skipping entry");
                     continue;
                 }
 
@@ -70,12 +67,12 @@ namespace DirLinkerWPF
 
                     if (!targetDir.Exists)
                     {
-                        WriteLine($"Missing link target directory: {targetDir}; skipping entry");
+                        PromptLine($"Missing link target directory: {targetDir}; skipping entry");
                         continue;
                     }
                     if (!Directory.Exists(linkPath))
                     {
-                        WriteLine($"Link directory already exists: {linkPath}; skipping entry");
+                        PromptLine($"Link directory already exists: {linkPath}; skipping entry");
                         continue;
                     }
 
@@ -100,7 +97,7 @@ namespace DirLinkerWPF
 
             var dirEntry = GetOrCreateDir(linkDir);
             var linkEntry = dirEntry.GetOrCreateLink(linkName, targetDir);
-            WriteLine("Created " + linkEntry);
+            PromptLine("Created " + linkEntry);
         }
 
         private LinkDirEntry Add(Configuration.LinkDir linkDir)
@@ -133,7 +130,7 @@ namespace DirLinkerWPF
         {
             var data = JsonConvert.SerializeObject(Config);
             File.WriteAllText(ConfigFile, data);
-            WriteLine("Config was saved. Data: " + data);
+            Debug.WriteLine("Config was saved. Data: " + data);
         }
 
         private void UpdateLinkList()
@@ -147,34 +144,31 @@ namespace DirLinkerWPF
             var defaults = new Configuration();
             return defaults;
         }
-
-        private void ToggleDebugExpanded()
-        {
-            if (_debugOutput != null)
-            {
-                _debugOutput.Close();
-                _debugOutput = null;
-            }
-            else
-            {
-                _debugOutput = new DebugOutput();
-                _debugOutput.Show();
-                _debugOutput.WriteLine(_debugBacklog);
-            }
-        }
-
+        
         public void StartEditDirectory(LinkDirEntry linkDirEntry)
         {
             LinkList.Children.Remove(linkDirEntry);
 
         }
 
-        private void WriteLine(object line)
+        private void PromptLine(object line)
         {
             var str = line.ToString();
-            _debugBacklog += str;
+
+            new Window
+            {
+                Height = 130,
+                Width = 400,
+                Content = new TextBlock
+                {
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Stretch,
+                    TextAlignment = TextAlignment.Center,
+                    Text = str
+                }
+            }.ShowDialog();
+
             Debug.WriteLine(str);
-            _debugOutput?.WriteLine(str);
         }
 
         private void Button_ApplyConfig(object sender, RoutedEventArgs e)
@@ -186,19 +180,7 @@ namespace DirLinkerWPF
             }
             catch (Exception ex)
             {
-                WriteLine("Could not apply Configuration: " + ex);
-            }
-        }
-
-        private void Button_ExpandDebug(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                ToggleDebugExpanded();
-            }
-            catch (Exception ex)
-            {
-                WriteLine("Could not toggle debug window: " + ex);
+                PromptLine("Could not apply Configuration: " + ex);
             }
         }
 
@@ -211,7 +193,7 @@ namespace DirLinkerWPF
             }
             catch (Exception ex)
             {
-                WriteLine("Could not add link: " + ex);
+                PromptLine("Could not add link: " + ex);
             }
         }
 
@@ -224,7 +206,7 @@ namespace DirLinkerWPF
             }
             catch (Exception ex)
             {
-                WriteLine("Could not open config: " + ex);
+                PromptLine("Could not open config: " + ex);
             }
         }
     }
