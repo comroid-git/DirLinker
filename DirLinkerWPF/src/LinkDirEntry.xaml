@@ -9,7 +9,7 @@
     <Grid Background="LightGray">
         <Grid.RowDefinitions>
             <RowDefinition Height="35" />
-            <RowDefinition Height="0" />
+            <RowDefinition Height="0" x:Name="ListRow" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
@@ -19,7 +19,7 @@
         <TextBlock Grid.Row="0" Grid.Column="0" Text="Link Directory:" />
         <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding LinkDirName}" VerticalAlignment="Bottom" />
 
-        <Button Grid.Row="0" Grid.Column="1" Content="Edit" Click="Button_Edit" />
+        <Button Grid.Row="0" Grid.Column="1" Content="Edit" Click="Button_Edit" IsEnabled="False" />
 
         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" Name="LinkList" />
     </Grid>

@@ -57,10 +57,12 @@ namespace DirLinkerWPF.src
         public LinkBlobEntry(MainWindow window, LinkDirEntry linkDirEntry, Configuration.LinkBlob blob)
         {
             DataContext = this;
+            InitializeComponent();
             _window = window;
             LinkDirEntry = linkDirEntry;
             Blob = blob;
-            InitializeComponent();
+            LinkName = LinkName;
+            TargetName = TargetName;
         }
 
         private void Button_Edit(object sender, RoutedEventArgs e)

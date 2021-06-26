@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,7 +28,6 @@ namespace DirLinkerWPF.src
         );
         private MainWindow _window;
         public Configuration.LinkDir Blob;
-        private List<Configuration.LinkBlob> _blobs;
         public bool IsDemo => _window == null;
 
         public string LinkDirName
@@ -45,17 +46,32 @@ namespace DirLinkerWPF.src
         public LinkDirEntry(MainWindow window, Configuration.LinkDir blob)
         {
             DataContext = this;
+            InitializeComponent();
             _window = window;
             Blob = blob;
-            InitializeComponent();
+            LinkDirName = LinkDirName;
         }
 
-        public void Add(Configuration.LinkBlob blob)
+        public LinkBlobEntry Add(Configuration.LinkBlob blob)
         {
             var entry = new LinkBlobEntry(_window, this, blob);
             LinkList.Children.Add(entry);
+            UpdateHeight();
             blob.Entry = entry;
-            _blobs.Add(blob);
+            return entry;
+        }
+
+        public LinkBlobEntry GetOrCreateLink(string linkName, DirectoryInfo targetDir)
+        {
+            return LinkList.Children.Cast<LinkBlobEntry>()
+                       .FirstOrDefault(it => it.LinkName.Equals(linkName))
+                   ?? Add(new Configuration.LinkBlob { LinkName = linkName, TargetDir = targetDir });
+        }
+
+        private void UpdateHeight()
+        {
+            var count = LinkList.Children.Cast<LinkBlobEntry>().Count();
+            ListRow.Height = new GridLength(count * 35);
         }
 
         private void Button_Edit(object sender, RoutedEventArgs e)

@@ -97,11 +97,14 @@ namespace DirLinkerWPF
                 throw new InvalidOperationException("Link target already exists: " + link.FullName);
             if (!targetDir.Exists)
                 throw new InvalidOperationException("Link target directory is missing: " + targetDir.FullName);
-
+            
             var dirObj = Config.LinkDirectories.Find(it => it.Directory == linkDir.FullName)
                 ?? new Configuration.LinkDir { Dir = linkDir, Links = new List<Configuration.LinkBlob>() };
-            var linkObj = new Configuration.LinkBlob { LinkName = linkName, TargetDir = targetDir };
-            dirObj.Links.Add(linkObj);
+            if (dirObj.Entry == null)
+                dirObj.Entry = new LinkDirEntry(this, dirObj);
+            LinkList.Children.Add(dirObj.Entry);
+            var linkEntry = dirObj.Entry.GetOrCreateLink(linkName, targetDir);
+            WriteLine("Created" + linkEntry);
         }
 
         private void LoadConfig()
@@ -118,7 +121,9 @@ namespace DirLinkerWPF
 
         private void SaveConfig()
         {
-            File.WriteAllText(ConfigFile, JsonConvert.SerializeObject(Config));
+            var data = JsonConvert.SerializeObject(Config);
+            File.WriteAllText(ConfigFile, data);
+            WriteLine("Config was saved. Data: " + data);
         }
 
         private void UpdateLinkList()
