@@ -24,6 +24,7 @@ namespace DirLinkerWPF
         public Configuration Config { get; private set; }
         private DebugOutput _debugOutput;
         private bool _debugExpanded;
+        private string _debugBacklog = "";
 
         public MainWindow()
         {
@@ -81,20 +82,6 @@ namespace DirLinkerWPF
             }
         }
 
-        private void ToggleDebugExpanded()
-        {
-            if (_debugOutput != null)
-            {
-                _debugOutput.Close();
-                _debugOutput = null;
-            }
-            else
-            {
-                _debugOutput = new DebugOutput();
-                _debugOutput.Show();
-            }
-        }
-
         private void AddLinkFromInput()
         {
             var linkDir = new DirectoryInfo(LinkDirInput.Text);
@@ -136,6 +123,29 @@ namespace DirLinkerWPF
         {
             var defaults = new Configuration();
             return defaults;
+        }
+
+        private void ToggleDebugExpanded()
+        {
+            if (_debugOutput != null)
+            {
+                _debugOutput.Close();
+                _debugOutput = null;
+            }
+            else
+            {
+                _debugOutput = new DebugOutput();
+                _debugOutput.Show();
+                _debugOutput.WriteLine(_debugBacklog);
+            }
+        }
+
+        private void WriteLine(object line)
+        {
+            var str = line.ToString();
+            _debugBacklog += str;
+            Debug.WriteLine(str);
+            _debugOutput?.WriteLine(str);
         }
 
         private void Button_ApplyConfig(object sender, RoutedEventArgs e)
@@ -184,12 +194,6 @@ namespace DirLinkerWPF
             {
                 WriteLine("Could not open config: " + ex);
             }
-        }
-
-        private void WriteLine(object line)
-        {
-            Debug.WriteLine(line);
-            _debugOutput?.WriteLine(line);
         }
     }
 }
