@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:DirLinkerWPF"
         xmlns:src="clr-namespace:DirLinkerWPF.src"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="DirLinker" Height="450" Width="800">
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />

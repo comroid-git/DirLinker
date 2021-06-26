@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using DirLinkerWPF.src;
 using Newtonsoft.Json;
 using SymbolicLinkSupport;
@@ -27,6 +28,7 @@ namespace DirLinkerWPF
 
         public MainWindow()
         {
+            Icon = new BitmapImage(new Uri("https://cdn.comroid.org/img/logo-clean.ico"));
             DataContext = this;
             InitializeComponent();
             Height = WindowHeight;
