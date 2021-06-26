@@ -24,10 +24,10 @@ namespace DirLinkerWPF.src
             typeof(LinkDirEntry),
             new PropertyMetadata(null)
         );
-        public MainWindow Window;
+        private MainWindow _window;
         public Configuration.LinkDir Blob;
         private List<Configuration.LinkBlob> _blobs;
-        public bool IsDemo => Blob == null;
+        public bool IsDemo => _window == null;
 
         public string LinkDirName
         {
@@ -39,11 +39,21 @@ namespace DirLinkerWPF.src
         {
             DataContext = this;
             InitializeComponent();
+            Blob = new Configuration.LinkDir { Entry = this };
+        }
+
+        public LinkDirEntry(MainWindow window, Configuration.LinkDir blob)
+        {
+            DataContext = this;
+            InitializeComponent();
+
+            _window = window;
+            Blob = blob;
         }
 
         public void Add(Configuration.LinkBlob blob)
         {
-            var entry = new LinkBlobEntry(Window, this, blob);
+            var entry = new LinkBlobEntry(_window, this, blob);
             LinkList.Children.Add(entry);
             blob.Entry = entry;
             _blobs.Add(blob);
@@ -51,7 +61,7 @@ namespace DirLinkerWPF.src
 
         private void Button_Edit(object sender, RoutedEventArgs e)
         {
-            Window.StartEditDirectory(this);
+            //todo Window.StartEditDirectory(this);
         }
     }
 }

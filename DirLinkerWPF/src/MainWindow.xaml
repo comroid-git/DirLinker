@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DirLinkerWPF"
+        xmlns:src="clr-namespace:DirLinkerWPF.src"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -32,13 +33,13 @@
 
         <ScrollViewer Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <StackPanel Name="LinkList"  Orientation="Vertical">
+                <src:LinkDirEntry />
+                <src:LinkBlobEntry />
             </StackPanel>
         </ScrollViewer>
 
         <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Button_ApplyConfig">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Margin="10,0" Text="Apply Configuration" />
-            </StackPanel>
+            <TextBlock Margin="10,0" Text="Apply Configuration" />
         </Button>
         <Button Grid.Row="3" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Button_ExpandDebug">
         </Button>

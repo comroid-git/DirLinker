@@ -34,7 +34,7 @@ namespace DirLinkerWPF.src
         private readonly MainWindow _window;
         public readonly LinkDirEntry LinkDirEntry;
         public readonly Configuration.LinkBlob Blob;
-        public bool IsDemo => Blob == null;
+        public bool IsDemo => _window == null;
 
         public string LinkName
         {
@@ -51,6 +51,7 @@ namespace DirLinkerWPF.src
         {
             DataContext = this;
             InitializeComponent();
+            Blob = new Configuration.LinkBlob { Entry = this };
         }
 
         public LinkBlobEntry(MainWindow window, LinkDirEntry linkDirEntry, Configuration.LinkBlob blob)

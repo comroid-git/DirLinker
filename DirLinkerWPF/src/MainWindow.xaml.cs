@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using DirLinkerWPF.src;
 using Newtonsoft.Json;
 using SymbolicLinkSupport;
 
@@ -124,12 +125,6 @@ namespace DirLinkerWPF
         {
             if (Config.ConfigVersion != 1)
                 throw new InvalidDataException("Unknown configuration Version");
-            foreach (var linkDir in Config.LinkDirectories)
-            foreach (var linkBlob in linkDir.Links
-                .Where(linkBlob => !LinkList.Children
-                    .Cast<LinkDirEntry>()
-                    .Any(it => it.IsEqual(linkDir, linkBlob)))) 
-                LinkList.Children.Add(new LinkDirEntry(this, linkDir, linkBlob));
         }
 
         private Configuration CreateDefaultConfig()
