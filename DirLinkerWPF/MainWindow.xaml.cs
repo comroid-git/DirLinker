@@ -46,8 +46,8 @@ namespace DirLinkerWPF
                 WriteLine("Could not load configuration: " + e);
             }
         }
-        
-        private void ApplyConfig()
+
+        private void ApplyConfigToOS()
         {
             if (Config.ConfigVersion != 1)
                 throw new InvalidDataException("Unknown configuration Version");
@@ -119,6 +119,11 @@ namespace DirLinkerWPF
             File.WriteAllText(ConfigFile, JsonConvert.SerializeObject(Config));
         }
 
+        private void UpdateLinkList()
+        {
+            throw new NotImplementedException();
+        }
+
         private Configuration CreateDefaultConfig()
         {
             var defaults = new Configuration();
@@ -152,7 +157,8 @@ namespace DirLinkerWPF
         {
             try
             {
-                ApplyConfig();
+                ApplyConfigToOS();
+                SaveConfig();
             }
             catch (Exception ex)
             {
@@ -177,6 +183,7 @@ namespace DirLinkerWPF
             try
             {
                 AddLinkFromInput();
+                UpdateLinkList();
             }
             catch (Exception ex)
             {
