@@ -21,6 +21,6 @@
 
         <Button Grid.Row="0" Grid.Column="1" Content="Edit" Click="Button_Edit" IsEnabled="False" />
 
-        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" Name="LinkList" />
+        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Vertical" Name="LinkList" />
     </Grid>
 </UserControl>
