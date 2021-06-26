@@ -8,7 +8,8 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid.RowDefinitions>
-            <RowDefinition Height="40" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
             <RowDefinition Height="15*" />
             <RowDefinition Height="40" />
             <RowDefinition Height="0" x:Name="DebugRow" />
@@ -20,39 +21,29 @@
             <ColumnDefinition Width="40" />
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <TextBlock>Link Directory</TextBlock>
-            <TextBox Name="LinkDirInput" />
-        </StackPanel>
-        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
-            <TextBlock>Link Name</TextBlock>
-            <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="LinkNameInput" />
-        </StackPanel>
-        <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal">
-            <TextBlock>Target Directory</TextBlock>
-            <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="TargetDirInput" />
-        </StackPanel>
-        <StackPanel Grid.Row="0" Grid.Column="3" Orientation="Horizontal">
-            <Button HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Button_AddLink">Add</Button>
-        </StackPanel>
+        <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">Link Directory</TextBlock>
+        <TextBox Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="LinkDirInput" />
+        <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">Link Name</TextBlock>
+        <TextBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="LinkNameInput" />
+        <TextBlock Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">Target Directory</TextBlock>
+        <TextBox Grid.Row="1" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="TargetDirInput" />
+        <Button Grid.Row="0" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Button_OpenConfig">Config</Button>
+        <Button Grid.Row="1" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Button_AddLink">Add</Button>
 
-        <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <ScrollViewer Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <StackPanel Orientation="Vertical">
             </StackPanel>
         </ScrollViewer>
 
-        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Button_ApplyConfig">
+        <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Button_ApplyConfig">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Margin="10,0" Text="Apply Configuration" />
             </StackPanel>
         </Button>
-        <Button Grid.Row="2" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Button_ExpandDebug">
+        <Button Grid.Row="3" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Button_ExpandDebug">
         </Button>
 
-        <ScrollViewer Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="DebugScroll" >
-            <TextBlock Name="DebugOutput">
-                Output is printed here...
-            </TextBlock>
+        <ScrollViewer Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="DebugScroll" >
         </ScrollViewer>
     </Grid>
 </Window>

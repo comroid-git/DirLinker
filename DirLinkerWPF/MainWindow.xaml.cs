@@ -22,19 +22,18 @@ namespace DirLinkerWPF
         public readonly string DataDir;
         public readonly string ConfigFile;
         public Configuration Config { get; private set; }
-
+        private DebugOutput _debugOutput;
         private bool _debugExpanded;
 
         public MainWindow()
         {
             DataContext = this;
+            InitializeComponent();
             Height = WindowHeight;
             Width = WindowWidth;
             ResizeMode = ResizeMode.CanMinimize;
             DataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "org.comroid");
-            var dir = new DirectoryInfo(DataDir);
-            if (!dir.Exists) 
-                dir.Create();
+            Directory.CreateDirectory(DataDir);
             ConfigFile = Path.Combine(DataDir, "dirLinker.json");
 
             try
@@ -45,13 +44,6 @@ namespace DirLinkerWPF
             {
                 WriteLine("Could not load configuration: " + e);
             }
-        }
-
-        internal void WriteLine(object line)
-        {
-            Debug.WriteLine("Debug Line: " + line);
-            //DebugOutput.Text += '\n' + line.ToString();
-            //DebugScroll.ChangeView(0, DebugScroll.ScrollableHeight, 1);
         }
         
         private void ApplyConfig()
@@ -91,10 +83,16 @@ namespace DirLinkerWPF
 
         private void ToggleDebugExpanded()
         {
-            var offset = (_debugExpanded = !_debugExpanded) ? 180 : 0;
-            DebugRow.Height = new GridLength(offset);
-            Height = WindowHeight + offset;
-            Width = WindowHeight + offset;
+            if (_debugOutput != null)
+            {
+                _debugOutput.Close();
+                _debugOutput = null;
+            }
+            else
+            {
+                _debugOutput = new DebugOutput();
+                _debugOutput.Show();
+            }
         }
 
         private void AddLinkFromInput()
@@ -171,6 +169,24 @@ namespace DirLinkerWPF
             {
                 WriteLine("Could not add link: " + ex);
             }
+        }
+
+        private void Button_OpenConfig(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Process.Start(ConfigFile);
+            }
+            catch (Exception ex)
+            {
+                WriteLine("Could not open config: " + ex);
+            }
+        }
+
+        private void WriteLine(object line)
+        {
+            Debug.WriteLine(line);
+            _debugOutput?.WriteLine(line);
         }
     }
 }
