@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Text;
+using DirLinkerWPF.src;
 using Newtonsoft.Json;
 
 namespace DirLinkerWPF
@@ -25,6 +24,8 @@ namespace DirLinkerWPF
                 get => new DirectoryInfo(Directory);
                 set => Directory = value.FullName;
             }
+
+            internal LinkDirEntry Entry;
         }
 
         public class LinkBlob
@@ -44,6 +45,8 @@ namespace DirLinkerWPF
                 get => new DirectoryInfo(TargetDirectory);
                 set => TargetDirectory = value.FullName;
             }
+
+            internal LinkBlobEntry Entry;
         }
     }
 }

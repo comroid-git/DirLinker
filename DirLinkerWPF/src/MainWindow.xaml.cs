@@ -153,7 +153,7 @@ namespace DirLinkerWPF
             }
         }
 
-        public void StartEditEntry(LinkDirEntry linkDirEntry)
+        public void StartEditDirectory(LinkDirEntry linkDirEntry)
         {
             LinkList.Children.Remove(linkDirEntry);
 
