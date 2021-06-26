@@ -11,14 +11,14 @@ namespace DirLinkerWPF
         [JsonProperty]
         public uint ConfigVersion = 1;
         [JsonProperty]
-        public List<LinkDir> LinkDirectories;
+        public List<LinkDir> LinkDirectories = new List<LinkDir>();
 
         public class LinkDir
         {
             [JsonProperty]
             public string Directory;
             [JsonProperty]
-            public List<LinkBlob> Links;
+            public List<LinkBlob> Links = new List<LinkBlob>();
 
             public DirectoryInfo Dir
             {
