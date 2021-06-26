@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,24 +8,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace DirLinkerWPF
 {
     /// <summary>
-    /// Interaction logic for DebugOutput.xaml
+    /// Interaction logic for UserControl1.xaml
     /// </summary>
-    public partial class DebugOutput : Window
+    public partial class UserControl1 : UserControl
     {
-        public DebugOutput()
+        public UserControl1()
         {
             InitializeComponent();
-        }
-
-        public void WriteLine(object line)
-        {
-            Output.Text += '\n' + line.ToString();
-            Scroll.Height = Scroll.ScrollableHeight;
         }
     }
 }

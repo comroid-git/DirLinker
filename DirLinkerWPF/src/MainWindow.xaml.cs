@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -121,7 +122,14 @@ namespace DirLinkerWPF
 
         private void UpdateLinkList()
         {
-            throw new NotImplementedException();
+            if (Config.ConfigVersion != 1)
+                throw new InvalidDataException("Unknown configuration Version");
+            foreach (var linkDir in Config.LinkDirectories)
+            foreach (var linkBlob in linkDir.Links
+                .Where(linkBlob => !LinkList.Children
+                    .Cast<LinkDirEntry>()
+                    .Any(it => it.IsEqual(linkDir, linkBlob)))) 
+                LinkList.Children.Add(new LinkDirEntry(this, linkDir, linkBlob));
         }
 
         private Configuration CreateDefaultConfig()
@@ -143,6 +151,12 @@ namespace DirLinkerWPF
                 _debugOutput.Show();
                 _debugOutput.WriteLine(_debugBacklog);
             }
+        }
+
+        public void StartEditEntry(LinkDirEntry linkDirEntry)
+        {
+            LinkList.Children.Remove(linkDirEntry);
+
         }
 
         private void WriteLine(object line)
@@ -195,7 +209,8 @@ namespace DirLinkerWPF
         {
             try
             {
-                Process.Start(ConfigFile);
+                SaveConfig();
+                Process.Start("explorer.exe", ConfigFile);
             }
             catch (Exception ex)
             {
