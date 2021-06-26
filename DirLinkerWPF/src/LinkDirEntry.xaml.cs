@@ -36,13 +36,6 @@ namespace DirLinkerWPF.src
             set => SetValue(LinkDirNameProperty, Blob.Directory = value);
         }
 
-        public LinkDirEntry()
-        {
-            DataContext = this;
-            InitializeComponent();
-            Blob = new Configuration.LinkDir { Entry = this };
-        }
-
         public LinkDirEntry(MainWindow window, Configuration.LinkDir blob)
         {
             DataContext = this;
