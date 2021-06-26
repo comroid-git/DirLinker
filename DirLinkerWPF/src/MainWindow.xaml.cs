@@ -109,6 +109,7 @@ namespace DirLinkerWPF
 
         private LinkDirEntry GetOrCreateDir(DirectoryInfo dir)
         {
+            // todo Always creates
             return LinkList.Children.Cast<LinkDirEntry>()
                        .FirstOrDefault(it => it.Blob.Dir == dir)
                    ?? Add(new Configuration.LinkDir {Dir = dir});
@@ -147,8 +148,7 @@ namespace DirLinkerWPF
         
         public void StartEditDirectory(LinkDirEntry linkDirEntry)
         {
-            LinkList.Children.Remove(linkDirEntry);
-
+            throw new NotImplementedException();
         }
 
         private void PromptLine(object line)
