@@ -97,14 +97,24 @@ namespace DirLinkerWPF
                 throw new InvalidOperationException("Link target already exists: " + link.FullName);
             if (!targetDir.Exists)
                 throw new InvalidOperationException("Link target directory is missing: " + targetDir.FullName);
-            
-            var dirObj = Config.LinkDirectories.Find(it => it.Directory == linkDir.FullName)
-                ?? new Configuration.LinkDir { Dir = linkDir, Links = new List<Configuration.LinkBlob>() };
-            if (dirObj.Entry == null)
-                dirObj.Entry = new LinkDirEntry(this, dirObj);
-            LinkList.Children.Add(dirObj.Entry);
-            var linkEntry = dirObj.Entry.GetOrCreateLink(linkName, targetDir);
-            WriteLine("Created" + linkEntry);
+
+            var dirEntry = GetOrCreateDir(linkDir);
+            var linkEntry = dirEntry.GetOrCreateLink(linkName, targetDir);
+            WriteLine("Created " + linkEntry);
+        }
+
+        private LinkDirEntry Add(Configuration.LinkDir linkDir)
+        {
+            var yield = new LinkDirEntry(this, linkDir);
+            LinkList.Children.Add(linkDir.Entry = yield);
+            return yield;
+        }
+
+        private LinkDirEntry GetOrCreateDir(DirectoryInfo dir)
+        {
+            return LinkList.Children.Cast<LinkDirEntry>()
+                       .FirstOrDefault(it => it.Blob.Dir == dir)
+                   ?? Add(new Configuration.LinkDir {Dir = dir});
         }
 
         private void LoadConfig()
