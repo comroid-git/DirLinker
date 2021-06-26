@@ -13,13 +13,12 @@
             <RowDefinition Height="30" />
             <RowDefinition Height="15*" />
             <RowDefinition Height="40" />
-            <RowDefinition Height="0" x:Name="DebugRow" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="57" />
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">Link Directory</TextBlock>
@@ -33,18 +32,13 @@
 
         <ScrollViewer Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <StackPanel Name="LinkList"  Orientation="Vertical">
-                <src:LinkDirEntry />
-                <src:LinkBlobEntry />
+                <src:LinkDirEntry LinkDirName="C:\Demo\" />
+                <src:LinkBlobEntry LinkName="Demo Link" TargetName="C:\Demo Link Target\" />
             </StackPanel>
         </ScrollViewer>
 
-        <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Button_ApplyConfig">
-            <TextBlock Margin="10,0" Text="Apply Configuration" />
+        <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Button_ApplyConfig">
+            Apply Configuration
         </Button>
-        <Button Grid.Row="3" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Button_ExpandDebug">
-        </Button>
-
-        <ScrollViewer Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="DebugScroll" >
-        </ScrollViewer>
     </Grid>
 </Window>
