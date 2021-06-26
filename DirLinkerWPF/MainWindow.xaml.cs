@@ -117,8 +117,11 @@ namespace DirLinkerWPF
 
         private void LoadConfig()
         {
-            string data = File.ReadAllText(ConfigFile);
-            Config = JsonConvert.DeserializeObject<Configuration>(data) ?? CreateDefaultConfig();
+            if (File.Exists(ConfigFile))
+            {
+                string data = File.ReadAllText(ConfigFile);
+                Config = JsonConvert.DeserializeObject<Configuration>(data) ?? CreateDefaultConfig();
+            } else Config = CreateDefaultConfig();
 
             if (Config == null)
                 throw new InvalidDataException("Could not load configuration");
