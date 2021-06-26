@@ -18,7 +18,7 @@ namespace DirLinkerWPF.src
     /// </summary>
     public partial class LinkDirEntry : UserControl
     {
-        public static readonly DependencyProperty LinkDirNameProp = DependencyProperty.Register(
+        public static readonly DependencyProperty LinkDirNameProperty = DependencyProperty.Register(
             "LinkDirName",
             typeof(string),
             typeof(LinkDirEntry),
@@ -32,7 +32,7 @@ namespace DirLinkerWPF.src
         public string LinkDirName
         {
             get => Blob.Directory;
-            set => SetValue(LinkDirNameProp, Blob.Directory = value);
+            set => SetValue(LinkDirNameProperty, Blob.Directory = value);
         }
 
         public LinkDirEntry()
@@ -45,10 +45,9 @@ namespace DirLinkerWPF.src
         public LinkDirEntry(MainWindow window, Configuration.LinkDir blob)
         {
             DataContext = this;
-            InitializeComponent();
-
             _window = window;
             Blob = blob;
+            InitializeComponent();
         }
 
         public void Add(Configuration.LinkBlob blob)

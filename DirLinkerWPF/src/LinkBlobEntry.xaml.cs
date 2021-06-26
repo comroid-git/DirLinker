@@ -18,13 +18,13 @@ namespace DirLinkerWPF.src
     /// </summary>
     public partial class LinkBlobEntry : UserControl
     {
-        public static readonly DependencyProperty LinkNameProp = DependencyProperty.Register(
+        public static readonly DependencyProperty LinkNameProperty = DependencyProperty.Register(
             "LinkName",
             typeof(string),
             typeof(LinkBlobEntry),
             new PropertyMetadata(null)
         );
-        public static readonly DependencyProperty TargetNameProp = DependencyProperty.Register(
+        public static readonly DependencyProperty TargetNameProperty = DependencyProperty.Register(
             "TargetName",
             typeof(string),
             typeof(LinkBlobEntry),
@@ -39,29 +39,28 @@ namespace DirLinkerWPF.src
         public string LinkName
         {
             get => Blob.LinkName;
-            set => SetValue(LinkNameProp, Blob.LinkName = value);
+            set => SetValue(LinkNameProperty, Blob.LinkName = value);
         }
         public string TargetName
         {
             get => Blob.TargetDirectory;
-            set => SetValue(TargetNameProp, Blob.TargetDirectory = value);
+            set => SetValue(TargetNameProperty, Blob.TargetDirectory = value);
         }
 
         public LinkBlobEntry()
         {
             DataContext = this;
-            InitializeComponent();
             Blob = new Configuration.LinkBlob { Entry = this };
+            InitializeComponent();
         }
 
         public LinkBlobEntry(MainWindow window, LinkDirEntry linkDirEntry, Configuration.LinkBlob blob)
         {
             DataContext = this;
-            InitializeComponent();
-
             _window = window;
             LinkDirEntry = linkDirEntry;
             Blob = blob;
+            InitializeComponent();
         }
 
         private void Button_Edit(object sender, RoutedEventArgs e)
