@@ -7,8 +7,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using DirLinkerConfig;
-using Newtonsoft.Json;
-using SymbolicLinkSupport;
 
 namespace DirLinkerWPF
 {
@@ -19,17 +17,8 @@ namespace DirLinkerWPF
     {
         public const int WindowHeight = 600;
         public const int WindowWidth = 840;
-        public Configuration Config { get; private set; }
+        public Configuration Config => Configuration.Instance;
         private Dictionary<string, Configuration.LinkDir> _blobs = new Dictionary<string, Configuration.LinkDir>();
-        public static readonly string DataDir;
-        public static readonly string ConfigFile;
-
-        static DirLinker()
-        {
-            DataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "org.comroid");
-            ConfigFile = Path.Combine(DataDir, "dirLinker.json");
-            Directory.CreateDirectory(DataDir);
-        }
 
         public DirLinker()
         {
@@ -39,11 +28,11 @@ namespace DirLinkerWPF
             Height = WindowHeight;
             Width = WindowWidth;
             ResizeMode = ResizeMode.CanMinimize;
-            Closing += (sender, args) => SaveConfig();
+            Closing += (sender, args) => Configuration.SaveConfig();
 
             try
             {
-                LoadConfig();
+                Configuration.LoadConfig();
                 CleanupConfig();
             }
             catch (Exception e)
@@ -128,28 +117,6 @@ namespace DirLinkerWPF
             Debug.WriteLine("Config after cleanup: " + Config.LinkDirectories.Count);
         }
 
-        private void LoadConfig()
-        {
-            if (File.Exists(ConfigFile))
-            {
-                string data = File.ReadAllText(ConfigFile);
-                Config = JsonConvert.DeserializeObject<Configuration>(data) ?? CreateDefaultConfig();
-            } else Config = CreateDefaultConfig();
-
-            if (Config == null)
-                throw new InvalidDataException("Could not load configuration");
-            UpdateLinkList();
-        }
-
-        private void SaveConfig()
-        {
-            CleanupConfig();
-            //ApplyConfigFromUI();
-            var data = JsonConvert.SerializeObject(Config);
-            File.WriteAllText(ConfigFile, data);
-            Debug.WriteLine("Config was saved. Data: " + data);
-        }
-
         private void UpdateLinkList()
         {
             if (Config.ConfigVersion != 1)
@@ -168,12 +135,6 @@ namespace DirLinkerWPF
                     var blobEntry = entry.GetOrCreateLink(blob.LinkName, blob.TargetDir);
                 }
             }
-        }
-
-        private Configuration CreateDefaultConfig()
-        {
-            var defaults = new Configuration();
-            return defaults;
         }
         
         public void StartEditDirectory(LinkDirEntry linkDirEntry)
@@ -205,7 +166,7 @@ namespace DirLinkerWPF
         {
             try
             {
-                SaveConfig();
+                Configuration.SaveConfig();
                 ApplyConfigToOS();
             }
             catch (Exception ex)
@@ -231,8 +192,8 @@ namespace DirLinkerWPF
         {
             try
             {
-                SaveConfig();
-                Process.Start("explorer.exe", ConfigFile);
+                Configuration.SaveConfig();
+                Process.Start("explorer.exe", Configuration.ConfigFile);
             }
             catch (Exception ex)
             {

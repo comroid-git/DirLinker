@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using Newtonsoft.Json;
 
@@ -12,10 +13,48 @@ namespace DirLinkerConfig
 
     public class Configuration
     {
+        public static Configuration Instance { get; private set; }
+        public static readonly string DataDir;
+        public static readonly string ConfigFile;
+
+        static Configuration()
+        {
+            DataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "org.comroid");
+            ConfigFile = Path.Combine(DataDir, "dirLinker.json");
+            Directory.CreateDirectory(DataDir);
+        }
+
         [JsonProperty]
         public uint ConfigVersion = 1;
         [JsonProperty]
         public List<LinkDir> LinkDirectories = new List<LinkDir>();
+
+        public static void LoadConfig()
+        {
+            if (File.Exists(ConfigFile))
+            {
+                string data = File.ReadAllText(ConfigFile);
+                Instance = JsonConvert.DeserializeObject<Configuration>(data) ?? CreateDefaultConfig();
+            }
+            else Instance = CreateDefaultConfig();
+
+            if (Instance == null)
+                throw new InvalidDataException("Could not load configuration");
+        }
+
+        public static void SaveConfig()
+        {
+            //ApplyConfigFromUI();
+            var data = JsonConvert.SerializeObject(Instance);
+            File.WriteAllText(ConfigFile, data);
+            Debug.WriteLine("Config was saved. Data: " + data);
+        }
+
+        public static Configuration CreateDefaultConfig()
+        {
+            var defaults = new Configuration();
+            return defaults;
+        }
 
         public class LinkDir
         {
