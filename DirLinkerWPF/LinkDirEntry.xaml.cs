@@ -30,12 +30,24 @@ namespace DirLinkerWPF
         private DirLinker _window;
         public Configuration.LinkDir Blob;
         public bool IsDemo => _window == null;
-        internal Dictionary<string, Configuration.LinkBlob> Blobs = new Dictionary<string, Configuration.LinkBlob>();
 
         public string LinkDirName
         {
             get => Blob.Directory;
             set => SetValue(LinkDirNameProperty, Blob.Directory = value);
+        }
+
+        public void ClearView()
+        {
+            LinkList.Children.Clear();
+        }
+
+        public void AddLinkToView(int index)
+        {
+            if (!(Blob.Links[index].Entry is LinkBlobEntry value))
+                return;
+            LinkList.Children.Add(value);
+            UpdateHeight();
         }
 
         public LinkDirEntry(DirLinker window, Configuration.LinkDir blob)
@@ -44,7 +56,6 @@ namespace DirLinkerWPF
             InitializeComponent();
             _window = window;
             Blob = blob;
-            Blob.UpdateHandler += UpdateHeight;
             LinkDirName = LinkDirName;
         }
 

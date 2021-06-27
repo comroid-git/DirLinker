@@ -48,7 +48,16 @@ namespace DirLinkerConfig
 
         public LinkDir GetOrCreate(string path)
         {
-            return Find(path) ?? new LinkDir { Directory = path };
+            var dir = Find(path);
+            if (dir != null)
+            {
+                return dir;
+            }
+
+            var blob = new LinkDir { Directory = path };
+            LinkDirectories.Add(blob);
+            Producer?.AddDirToView(LinkDirectories.Count);
+            return blob;
         }
 
         public bool Remove(string path)
@@ -99,8 +108,11 @@ namespace DirLinkerConfig
                 linkDir.Entry = entry;
             }
 
-            foreach (var each in LinkDirectories)
+            Producer?.ClearView();
+            for (var i = 0; i < LinkDirectories.Count; i++)
             {
+                Producer?.AddDirToView(i);
+                var each = LinkDirectories[i];
                 each.Config = this;
                 each.Producer = Producer;
             }
@@ -138,8 +150,6 @@ namespace DirLinkerConfig
             public IEntryProducer Producer;
             [JsonIgnore]
             public ILinkDirEntry Entry;
-            
-            public event Action UpdateHandler;
 
             [CanBeNull]
             public LinkBlob Find(string name)
@@ -149,7 +159,16 @@ namespace DirLinkerConfig
             
             public LinkBlob GetOrCreate(string name, DirectoryInfo directory)
             {
-                return Find(name) ?? new LinkBlob { LinkName = name, TargetDir = directory };
+                var find = Find(name);
+                if (find != null)
+                {
+                    return find;
+                }
+
+                var blob = new LinkBlob { LinkName = name, TargetDir = directory };
+                Links.Add(blob);
+                Entry?.AddLinkToView(Links.Count);
+                return blob;
             }
 
             public bool Remove(string linkName)
@@ -158,7 +177,7 @@ namespace DirLinkerConfig
                 return link != null && Links.Remove(link);
             }
 
-            public void UpdateFrom(LinkDir newData)
+            public void UpdateFrom(LinkDir newData = null)
             {
                 if (newData != null)
                 {
@@ -181,10 +200,14 @@ namespace DirLinkerConfig
                     var entry = Producer?.CreateBlobEntry(this, linkBlob);
                     linkBlob.Entry = entry;
                 }
-                
-                foreach (var each in Links) 
+
+                Entry?.ClearView();
+                for (var i = 0; i < Links.Count; i++)
+                {
+                    Entry?.AddLinkToView(i);
+                    var each = Links[i];
                     each.DirBlob = this;
-                UpdateHandler?.Invoke();
+                }
             }
         }
 
@@ -223,6 +246,14 @@ namespace DirLinkerConfig
         }
     }
 
+    public interface IEntryProducer
+    {
+        void ClearView();
+        void AddDirToView(int index);
+        ILinkDirEntry CreateDirEntry(Configuration.LinkDir blob);
+        ILinkBlobEntry CreateBlobEntry(Configuration.LinkDir dir, Configuration.LinkBlob blob);
+    }
+
     public interface IUpdateable<T>
     {
         void UpdateFrom(T newData);
@@ -230,19 +261,11 @@ namespace DirLinkerConfig
     
     public interface ILinkDirEntry
     {
-        bool IsDemo { get; }
-        string LinkDirName { get; set; }
+        void ClearView();
+        void AddLinkToView(int index);
     }
     
     public interface ILinkBlobEntry
     {
-        string LinkName { get; set; }
-        string TargetName { get; set; }
-    }
-
-    public interface IEntryProducer
-    {
-        ILinkDirEntry CreateDirEntry(Configuration.LinkDir blob);
-        ILinkBlobEntry CreateBlobEntry(Configuration.LinkDir dir, Configuration.LinkBlob blob);
     }
 }
