@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.8.0" />
     <PackageReference Include="SymbolicLinkSupport" Version="1.2.0" />
   </ItemGroup>
 

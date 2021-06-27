@@ -48,9 +48,16 @@ namespace DirLinkerWPF
 
         private void ApplyConfigToOS()
         {
-            var startInfo = new ProcessStartInfo("HardLinkTool.exe", $"--data \"{JsonConvert.SerializeObject(Config)}\"")
+            var startInfo = new ProcessStartInfo()
             {
-                Verb = "runas"
+                FileName = "HardLinkTool.exe",
+                Arguments = $"--data \"{JsonConvert.SerializeObject(Config)}\"",
+                WindowStyle = ProcessWindowStyle.Hidden,
+                UseShellExecute = true,
+                Verb = "runas",
+                RedirectStandardInput = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true
             };
 
             Process.Start(startInfo);
