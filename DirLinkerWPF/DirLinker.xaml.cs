@@ -80,6 +80,13 @@ namespace DirLinkerWPF
 
             var dirEntry = GetOrCreateDir(linkDir);
             var linkEntry = dirEntry.GetOrCreateLink(LinkNameInput.Text, targetDir);
+
+            LinkDirInput.Text = "";
+            LinkDirInput.IsEnabled = true;
+            LinkNameInput.Text = "";
+            LinkNameInput.IsEnabled = true;
+            TargetDirInput.Text = "";
+            TargetDirInput.IsEnabled = true;
         }
 
         private LinkDirEntry Add(Configuration.LinkDir blob)
@@ -157,7 +164,13 @@ namespace DirLinkerWPF
                 }
             }
         }
-        
+
+        public void StartAddLink(string forDir)
+        {
+            LinkDirInput.Text = forDir;
+            LinkDirInput.IsEnabled = false;
+        }
+
         public void StartEditDirectory(LinkDirEntry linkDirEntry)
         {
             throw new NotImplementedException();

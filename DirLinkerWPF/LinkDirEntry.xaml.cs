@@ -88,6 +88,11 @@ namespace DirLinkerWPF
             ListRow.Height = new GridLength(count * 35);
         }
 
+        private void Button_AddLink(object sender, RoutedEventArgs e)
+        {
+            _window.StartAddLink(LinkDirName);
+        }
+
         private void Button_Edit(object sender, RoutedEventArgs e)
         {
             throw new NotImplementedException();
