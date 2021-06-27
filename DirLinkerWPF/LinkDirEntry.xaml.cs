@@ -44,6 +44,7 @@ namespace DirLinkerWPF
             InitializeComponent();
             _window = window;
             Blob = blob;
+            Blob.UpdateHandler += UpdateHeight;
             LinkDirName = LinkDirName;
         }
 

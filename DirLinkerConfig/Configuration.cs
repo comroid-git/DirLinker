@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 
 namespace DirLinkerConfig
@@ -39,12 +40,21 @@ namespace DirLinkerConfig
         [JsonIgnore]
         public IEnumerable<LinkBlob> LinkBlobs => LinkDirectories.SelectMany(it => it.Links);
 
+        [CanBeNull]
+        public LinkDir Find(string path)
+        {
+            return LinkDirectories.FirstOrDefault(e => e.Directory.Equals(path));
+        }
+
         public LinkDir GetOrCreate(string path)
         {
-            var it = LinkDirectories.FirstOrDefault(e => e.Directory.Equals(path));
-            if (it == null)
-                it = new LinkDir { Directory = path };
-            return it;
+            return Find(path) ?? new LinkDir { Directory = path };
+        }
+
+        public bool Remove(string path)
+        {
+            var dir = Find(path);
+            return dir != null && LinkDirectories.Remove(dir);
         }
 
         public static void LoadConfig()
@@ -118,7 +128,6 @@ namespace DirLinkerConfig
             public string Directory;
             [JsonProperty]
             public List<LinkBlob> Links = new List<LinkBlob>();
-            
             [JsonIgnore]
             public DirectoryInfo Dir
             {
@@ -129,13 +138,24 @@ namespace DirLinkerConfig
             public IEntryProducer Producer;
             [JsonIgnore]
             public ILinkDirEntry Entry;
+            
+            public event Action UpdateHandler;
 
+            [CanBeNull]
+            public LinkBlob Find(string name)
+            {
+                return Links.FirstOrDefault(e => e.LinkName.Equals(name));
+            }
+            
             public LinkBlob GetOrCreate(string name, DirectoryInfo directory)
             {
-                var it = Links.FirstOrDefault(e => e.LinkName.Equals(name));
-                if (it == null)
-                    it = new LinkBlob { LinkName = name, TargetDir = directory };
-                return it;
+                return Find(name) ?? new LinkBlob { LinkName = name, TargetDir = directory };
+            }
+
+            public bool Remove(string linkName)
+            {
+                var link = Find(linkName);
+                return link != null && Links.Remove(link);
             }
 
             public void UpdateFrom(LinkDir newData)
@@ -164,6 +184,7 @@ namespace DirLinkerConfig
                 
                 foreach (var each in Links) 
                     each.DirBlob = this;
+                UpdateHandler?.Invoke();
             }
         }
 

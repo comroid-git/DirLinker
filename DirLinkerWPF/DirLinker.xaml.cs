@@ -76,8 +76,8 @@ namespace DirLinkerWPF
                 throw new InvalidOperationException("Link target directory is missing: " + targetDir.FullName);
             */
 
-            var dirEntry = GetOrCreateDir(linkDir);
-            var linkEntry = linkDir.GetOrCreateLink(LinkNameInput.Text, targetDir);
+            var dirEntry = Config.GetOrCreate(linkDir.FullName);
+            var linkEntry = dirEntry.GetOrCreate(LinkNameInput.Text, targetDir);
 
             LinkDirInput.Text = "";
             LinkDirInput.IsEnabled = true;
@@ -85,38 +85,6 @@ namespace DirLinkerWPF
             LinkNameInput.IsEnabled = true;
             TargetDirInput.Text = "";
             TargetDirInput.IsEnabled = true;
-        }
-
-        private LinkDirEntry Add(Configuration.LinkDir blob)
-        {
-            var entry = new LinkDirEntry(this, blob);
-            LinkList.Children.Add(entry);
-            blob.Entry = entry;
-            _blobs[blob.Directory] = blob;
-            Config.LinkDirectories.Add(blob);
-            return entry;
-        }
-
-        private void Remove(LinkDirEntry existing)
-        { 
-            for (int index = 0; index < Config.LinkDirectories.Count; index++) 
-            { 
-                var possibleDuplicate = Config.LinkDirectories[index];
-                
-                if (existing.LinkDirName.Equals(possibleDuplicate.Directory)) 
-                { 
-                    Config.LinkDirectories.RemoveAt(index);
-                    LinkList.Children.Remove(existing);
-                }
-            }
-        }
-
-        private LinkDirEntry GetOrCreateDir(DirectoryInfo dir)
-        {
-            _blobs.TryGetValue(dir.FullName, out Configuration.LinkDir add);
-            if (add != null)
-                return add.Entry as LinkDirEntry;
-            return Add(new Configuration.LinkDir { Dir = dir });
         }
 
         private void CleanupConfig()
@@ -152,9 +120,9 @@ namespace DirLinkerWPF
 
             foreach (var each in dirs)
             {
-                var entry = GetOrCreateDir(each.Dir);
+                var entry = Config.GetOrCreate(each.Dir.FullName);
 
-                var blobs = new List<Configuration.LinkBlob>(each.Links.Where(it => !entry.Blobs.Values.Contains(it)));
+                var blobs = new List<Configuration.LinkBlob>(each.Links.Where(it => !entry.Links.Contains(it)));
                 
                 foreach (var blob in blobs)
                 {
@@ -252,7 +220,7 @@ namespace DirLinkerWPF
         {
             try
             {
-                Remove(linkDirEntry);
+                Config.Remove(linkDirEntry.Blob.Directory);
                 UpdateUI();
             }
             catch (Exception ex)
@@ -261,16 +229,16 @@ namespace DirLinkerWPF
             }
         }
 
-        public void Button_RemoveBlob(LinkDirEntry linkDirEntry, LinkBlobEntry linkBlobEntry)
+        public void Button_RemoveBlob(Configuration.LinkDir linkDirEntry, Configuration.LinkBlob linkBlobEntry)
         {
             try
             {
-                linkDirEntry.Remove(linkBlobEntry);
+                linkDirEntry.Remove(linkBlobEntry.LinkName);
                 UpdateUI();
             }
             catch (Exception ex)
             {
-                PromptText($"Could not remove LinkBlob {linkDirEntry.LinkDirName} - {linkBlobEntry.LinkName}: " + ex);
+                PromptText($"Could not remove LinkBlob {linkDirEntry.Directory} - {linkBlobEntry.LinkName}: " + ex);
             }
         }
 
