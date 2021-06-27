@@ -19,6 +19,7 @@
         <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding LinkDirName}" VerticalAlignment="Bottom" />
 
         <Button Grid.Row="0" Grid.Column="1" Content="Edit" Click="Button_Edit" IsEnabled="False" />
+        <Button Grid.Row="0" Grid.Column="2" Content="Del" Click="Button_Remove" IsEnabled="False" />
 
         <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Vertical" Name="LinkList" />
     </Grid>

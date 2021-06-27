@@ -26,5 +26,6 @@
         <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding TargetName}" VerticalAlignment="Bottom" />
 
         <Button Grid.Row="0" Grid.Column="3" Content="Edit" Click="Button_Edit" IsEnabled="False" />
+        <Button Grid.Row="0" Grid.Column="4" Content="Del" Click="Button_Remove" IsEnabled="False" />
     </Grid>
 </UserControl>

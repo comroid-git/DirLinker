@@ -64,14 +64,9 @@ namespace DirLinkerWPF
             throw new NotImplementedException();
         }
 
-        public bool Equals(object other)
+        private void Button_Remove(object sender, RoutedEventArgs e)
         {
-            return other switch
-            {
-                LinkBlobEntry entry => entry.LinkName.Equals(LinkName),
-                Configuration.LinkBlob blob => blob.LinkName.Equals(LinkName),
-                _ => base.Equals(other)
-            };
+            throw new NotImplementedException();
         }
     }
 }

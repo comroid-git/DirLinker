@@ -77,14 +77,9 @@ namespace DirLinkerWPF
             //todo Window.StartEditDirectory(this);
         }
 
-        public bool Equals(object other)
+        private void Button_Remove(object sender, RoutedEventArgs e)
         {
-            return other switch
-            {
-                LinkDirEntry entry => entry.LinkDirName.Equals(LinkDirName),
-                Configuration.LinkDir dir => dir.Directory.Equals(LinkDirName),
-                _ => base.Equals(other)
-            };
+            throw new NotImplementedException();
         }
     }
 }
