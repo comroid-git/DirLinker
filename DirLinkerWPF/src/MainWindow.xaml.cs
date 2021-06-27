@@ -88,10 +88,12 @@ namespace DirLinkerWPF
 
         private void AddLinkFromInput()
         {
-            var linkDir = new DirectoryInfo(LinkDirInput.Text);
-            var linkName = LinkNameInput.Text;
-            var link = new DirectoryInfo(Path.Combine(linkDir.FullName, linkName));
-            var targetDir = new DirectoryInfo(TargetDirInput.Text);
+            var linkDirStr = LinkDirInput.Text;
+            var linkDir = new DirectoryInfo(linkDirStr.EndsWith(Path.DirectorySeparatorChar) ? linkDirStr : linkDirStr + Path.DirectorySeparatorChar);
+            var linkNameStr = Path.Combine(linkDir.FullName, LinkNameInput.Text);
+            var link = new DirectoryInfo(linkNameStr = linkNameStr.EndsWith(Path.DirectorySeparatorChar) ? linkNameStr : linkNameStr + Path.DirectorySeparatorChar);
+            var targetStr = TargetDirInput.Text;
+            var targetDir = new DirectoryInfo(targetStr.EndsWith(Path.DirectorySeparatorChar) ? targetStr : targetStr + Path.DirectorySeparatorChar);
 
             /*
             if (!linkDir.Exists)
@@ -103,8 +105,7 @@ namespace DirLinkerWPF
             */
 
             var dirEntry = GetOrCreateDir(linkDir);
-            var linkEntry = dirEntry.GetOrCreateLink(linkName, targetDir);
-            PromptLine("Created " + linkEntry);
+            var linkEntry = dirEntry.GetOrCreateLink(linkNameStr, targetDir);
         }
 
         private LinkDirEntry Add(Configuration.LinkDir blob)
