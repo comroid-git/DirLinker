@@ -17,7 +17,7 @@ namespace DirLinkerWPF
     /// <summary>
     /// Interaction logic for LinkBlobEntry.xaml
     /// </summary>
-    public partial class LinkBlobEntry : UserControl
+    public partial class LinkBlobEntry : UserControl, ILinkBlobEntry
     {
         public static readonly DependencyProperty LinkNameProperty = DependencyProperty.Register(
             "LinkName",

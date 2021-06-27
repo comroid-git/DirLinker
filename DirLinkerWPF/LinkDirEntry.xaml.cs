@@ -19,7 +19,7 @@ namespace DirLinkerWPF
     /// <summary>
     /// Interaction logic for LinkDirEntry.xaml
     /// </summary>
-    public partial class LinkDirEntry : UserControl
+    public partial class LinkDirEntry : UserControl, ILinkDirEntry
     {
         public static readonly DependencyProperty LinkDirNameProperty = DependencyProperty.Register(
             "LinkDirName",
@@ -47,7 +47,7 @@ namespace DirLinkerWPF
             LinkDirName = LinkDirName;
         }
 
-        public LinkBlobEntry Add(Configuration.LinkBlob blob)
+        public ILinkBlobEntry Add(Configuration.LinkBlob blob)
         {
             var entry = new LinkBlobEntry(_window, this, blob);
             LinkList.Children.Add(entry);
@@ -58,7 +58,7 @@ namespace DirLinkerWPF
             return entry;
         }
 
-        public void Remove(LinkBlobEntry entry)
+        public void Remove(ILinkBlobEntry entry)
         {
             for (int index = 0; index < Blob.Links.Count; index++)
             {
@@ -67,14 +67,14 @@ namespace DirLinkerWPF
                 if (entry.LinkName.Equals(possibleDuplicate.LinkName))
                 {
                     Blob.Links.RemoveAt(index);
-                    LinkList.Children.Remove(entry);
+                    LinkList.Children.Remove(entry as LinkBlobEntry);
                 }
             }
 
             UpdateHeight();
         }
 
-        public LinkBlobEntry GetOrCreateLink(string linkName, DirectoryInfo targetDir)
+        public ILinkBlobEntry GetOrCreateLink(string linkName, DirectoryInfo targetDir)
         {
             Blobs.TryGetValue(linkName, out Configuration.LinkBlob add);
             if (add != null)
