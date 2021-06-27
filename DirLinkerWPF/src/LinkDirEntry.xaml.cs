@@ -48,7 +48,8 @@ namespace DirLinkerWPF.src
         public LinkBlobEntry Add(Configuration.LinkBlob blob)
         {
             var entry = new LinkBlobEntry(_window, this, blob);
-            LinkList.Children.Add(entry);
+            if (!LinkList.Children.Contains(entry))
+                LinkList.Children.Add(entry);
             UpdateHeight();
             blob.Entry = entry;
             return entry;
@@ -70,6 +71,16 @@ namespace DirLinkerWPF.src
         private void Button_Edit(object sender, RoutedEventArgs e)
         {
             //todo Window.StartEditDirectory(this);
+        }
+
+        public bool Equals(object other)
+        {
+            return other switch
+            {
+                LinkDirEntry entry => entry.LinkDirName.Equals(LinkDirName),
+                Configuration.LinkDir dir => dir.Directory.Equals(LinkDirName),
+                _ => base.Equals(other)
+            };
         }
     }
 }

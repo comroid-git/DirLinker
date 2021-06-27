@@ -105,7 +105,8 @@ namespace DirLinkerWPF
         private LinkDirEntry Add(Configuration.LinkDir linkDir)
         {
             var yield = new LinkDirEntry(this, linkDir);
-            LinkList.Children.Add(linkDir.Entry = yield);
+            if (!LinkList.Children.Contains(yield)) 
+                LinkList.Children.Add(linkDir.Entry = yield);
             return yield;
         }
 

@@ -62,5 +62,15 @@ namespace DirLinkerWPF.src
         {
             throw new NotImplementedException();
         }
+
+        public bool Equals(object other)
+        {
+            return other switch
+            {
+                LinkBlobEntry entry => entry.LinkName.Equals(LinkName),
+                Configuration.LinkBlob blob => blob.LinkName.Equals(LinkName),
+                _ => base.Equals(other)
+            };
+        }
     }
 }
