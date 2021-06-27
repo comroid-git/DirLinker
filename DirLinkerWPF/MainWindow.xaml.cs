@@ -48,6 +48,14 @@ namespace DirLinkerWPF
 
         private void ApplyConfigToOS()
         {
+            var startInfo = new ProcessStartInfo("HardLinkTool.exe", $"--data \"{JsonConvert.SerializeObject(Config)}\"")
+            {
+                Verb = "runas"
+            };
+
+            Process.Start(startInfo);
+
+            /*
             if (Config.ConfigVersion != 1)
                 throw new InvalidDataException("Unknown configuration Version");
             foreach (var it in Config.LinkDirectories)
@@ -79,6 +87,7 @@ namespace DirLinkerWPF
                     targetDir.CreateSymbolicLink(linkPath);
                 }
             }
+            */
         }
 
         private void AddLinkFromInput()

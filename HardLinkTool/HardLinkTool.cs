@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using CommandLine;
+using DirLinkerConfig;
+using Newtonsoft.Json;
 
 namespace HardLinkTool
 {
@@ -14,7 +16,7 @@ namespace HardLinkTool
         public string Data { get; set; } = string.Empty;
     }
 
-    public class Program
+    public class HardLinkTool
     {
         public static void Main(string[] args)
         {
@@ -25,6 +27,7 @@ namespace HardLinkTool
 
         private static void Run(CliOptions args)
         {
+            var config = JsonConvert.DeserializeObject<Configuration>(args.Data);
         }
 
         private static void ParserError(IEnumerable<Error> obj)
