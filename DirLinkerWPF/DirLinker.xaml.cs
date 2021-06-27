@@ -15,6 +15,7 @@ namespace DirLinkerWPF
     /// </summary>
     public partial class DirLinker : Window
     {
+        public const string PauseConsolePrefix = "Pause Console?\n";
         public const int WindowHeight = 600;
         public const int WindowWidth = 840;
         public Configuration Config => Configuration.Instance;
@@ -40,15 +41,19 @@ namespace DirLinkerWPF
             {
                 PromptText("Could not load configuration: " + e);
             }
+
+            HaltConsoleBtn.Content = PauseConsolePrefix + Config.PauseConsole;
         }
 
         private void ApplyConfigToOS()
         {
-            var startInfo = new ProcessStartInfo();
-            startInfo.FileName = "HardLinkTool.exe";
-            startInfo.Arguments = DirLinkerInfo.ApplyConfigArgument + ' ' + DirLinkerInfo.HaltOnErrorOnly;
-            startInfo.UseShellExecute = true;
-            startInfo.Verb = "runas";
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = "HardLinkTool.exe",
+                Arguments = DirLinkerInfo.ApplyConfigArgument + (Config.PauseConsole ? string.Empty : ' ' + DirLinkerInfo.HaltOnErrorOnly),
+                UseShellExecute = true,
+                Verb = "runas"
+            };
             Process.Start(startInfo);
         }
 
@@ -195,6 +200,19 @@ namespace DirLinkerWPF
             catch (Exception ex)
             {
                 PromptText("Could not open config: " + ex);
+            }
+        }
+
+        private void Button_ToggleHaltConsole(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Config.PauseConsole = !Config.PauseConsole;
+                HaltConsoleBtn.Content = PauseConsolePrefix + Config.PauseConsole;
+            }
+            catch (Exception ex)
+            {
+                PromptText("Could not toggle Halting state: " + ex);
             }
         }
     }

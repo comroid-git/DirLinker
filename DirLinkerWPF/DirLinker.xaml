@@ -33,8 +33,7 @@
             <StackPanel Name="LinkList"  Orientation="Vertical" />
         </ScrollViewer>
 
-        <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Button_ApplyConfig">
-            Apply Configuration
-        </Button>
+        <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Button_ApplyConfig" Content="Apply Configuration" />
+        <Button Grid.Row="3" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Button_ToggleHaltConsole" Name="HaltConsoleBtn" HorizontalContentAlignment="Center" />
     </Grid>
 </Window>

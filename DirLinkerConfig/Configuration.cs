@@ -29,6 +29,8 @@ namespace DirLinkerConfig
         [JsonProperty]
         public uint ConfigVersion = 1;
         [JsonProperty]
+        public bool PauseConsole;
+        [JsonProperty]
         public List<LinkDir> LinkDirectories = new List<LinkDir>();
 
         [JsonIgnore]
