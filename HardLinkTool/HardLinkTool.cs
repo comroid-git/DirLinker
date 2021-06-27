@@ -92,8 +92,8 @@ namespace HardLinkTool
                 }
                 // move the directory to target position and create symlink
                 Console.WriteLine($"Need to move link source {Link.FullName} to target directory {Target.FullName}");
-                FileSystem.MoveDirectory(Link.FullName, Target.FullName);
-                CreateSymlink();
+                FileSystem.CopyDirectory(Link.FullName, Target.FullName);
+                CreateSymlink(true);
                 return;
             }
             // only create symlink
@@ -109,8 +109,12 @@ namespace HardLinkTool
             }
 
             if (Link.Exists && !Link.IsSymbolicLink() && deleteIfPresent)
+            {
+                Console.WriteLine($"Need to delete existing directory: " + Link.FullName);
                 Link.Delete(true);
-            Link.CreateSymbolicLink(Target.FullName);
+            }
+            Console.WriteLine($"Creating Symbolic Link: {Link.FullName} --> {Target.FullName}");
+            Target.CreateSymbolicLink(Link.FullName);
         }
     }
 }
