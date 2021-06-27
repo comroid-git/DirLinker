@@ -24,16 +24,16 @@ namespace HardLinkTool
             catch (Exception ex)
             {
                 Console.WriteLine("Internal Error: " + ex);
-                if (HaltOnErrorOnly)
-                {
-                    Console.WriteLine("Press any Key to exit");
-                    Console.ReadKey();
-                    return;
-                }
+                WaitForUserInput();
             }
 
             if (HaltOnErrorOnly) 
                 return;
+            WaitForUserInput();
+        }
+
+        private static void WaitForUserInput()
+        {
             Console.WriteLine("Press any Key to exit");
             Console.ReadKey();
         }
