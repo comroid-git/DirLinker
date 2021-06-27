@@ -148,8 +148,8 @@ namespace DirLinkerWPF
 
             new Window
             {
-                Height = 130,
-                Width = 400,
+                Height = 260,
+                Width = 800,
                 Content = new TextBlock
                 {
                     HorizontalAlignment = HorizontalAlignment.Stretch,
