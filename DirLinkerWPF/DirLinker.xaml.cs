@@ -42,7 +42,12 @@ namespace DirLinkerWPF
                 PromptText("Could not load configuration: " + e);
             }
 
-            HaltConsoleBtn.Content = PauseConsolePrefix + Config.PauseConsole;
+            UpdateUI();
+        }
+
+        private void UpdateUI()
+        {
+            HaltConsoleBtn.Content = PauseConsolePrefix + (Config.PauseConsole ? "✔ yes" : "❌ no");
         }
 
         private void ApplyConfigToOS()
@@ -208,7 +213,7 @@ namespace DirLinkerWPF
             try
             {
                 Config.PauseConsole = !Config.PauseConsole;
-                HaltConsoleBtn.Content = PauseConsolePrefix + Config.PauseConsole;
+                UpdateUI();
             }
             catch (Exception ex)
             {
