@@ -613,4 +613,4 @@ fabric.properties
 .vs/**
 .vscode/**
 .idea/**
-Installer.exe
+DirLinker Setup.exe
