@@ -48,12 +48,12 @@ namespace DirLinkerWPF
             set => SetValue(TargetNameProperty, Blob.TargetDirectory = value);
         }
 
-        public LinkBlobEntry(DirLinker window, LinkDirEntry linkDirEntry, Configuration.LinkBlob blob)
+        public LinkBlobEntry(DirLinker window, Configuration.LinkDir linkDirEntry, Configuration.LinkBlob blob)
         {
             DataContext = this;
             InitializeComponent();
             _window = window;
-            LinkDirEntry = linkDirEntry;
+            LinkDirEntry = linkDirEntry.Entry as LinkDirEntry;
             Blob = blob;
             LinkName = LinkName;
             TargetName = TargetName;

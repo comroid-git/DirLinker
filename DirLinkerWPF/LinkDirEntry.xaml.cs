@@ -47,41 +47,6 @@ namespace DirLinkerWPF
             LinkDirName = LinkDirName;
         }
 
-        public ILinkBlobEntry Add(Configuration.LinkBlob blob)
-        {
-            var entry = new LinkBlobEntry(_window, this, blob);
-            LinkList.Children.Add(entry);
-            blob.Entry = entry;
-            Blobs[blob.LinkName] = blob;
-            UpdateHeight();
-            Blob.Links.Add(blob);
-            return entry;
-        }
-
-        public void Remove(ILinkBlobEntry entry)
-        {
-            for (int index = 0; index < Blob.Links.Count; index++)
-            {
-                var possibleDuplicate = Blob.Links[index];
-
-                if (entry.LinkName.Equals(possibleDuplicate.LinkName))
-                {
-                    Blob.Links.RemoveAt(index);
-                    LinkList.Children.Remove(entry as LinkBlobEntry);
-                }
-            }
-
-            UpdateHeight();
-        }
-
-        public ILinkBlobEntry GetOrCreateLink(string linkName, DirectoryInfo targetDir)
-        {
-            Blobs.TryGetValue(linkName, out Configuration.LinkBlob add);
-            if (add != null)
-                return add.Entry as LinkBlobEntry;
-            return Add(new Configuration.LinkBlob { LinkName = linkName, TargetDir = targetDir });
-        }
-
         private void UpdateHeight()
         {
             var count = LinkList.Children.Cast<LinkBlobEntry>().Count();

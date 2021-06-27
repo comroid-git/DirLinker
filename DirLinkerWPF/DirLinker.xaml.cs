@@ -13,7 +13,7 @@ namespace DirLinkerWPF
     /// <summary>
     /// Interaction logic for DirLinker.xaml
     /// </summary>
-    public partial class DirLinker : Window
+    public partial class DirLinker : Window, IEntryProducer
     {
         public const string PauseConsolePrefix = "Pause Console?\n";
         public const int WindowHeight = 600;
@@ -32,7 +32,6 @@ namespace DirLinkerWPF
 
             try
             {
-                Configuration.LoadConfig();
                 CleanupConfig();
             }
             catch (Exception e)
@@ -273,6 +272,16 @@ namespace DirLinkerWPF
             {
                 PromptText($"Could not remove LinkBlob {linkDirEntry.LinkDirName} - {linkBlobEntry.LinkName}: " + ex);
             }
+        }
+
+        public ILinkDirEntry CreateDirEntry(Configuration.LinkDir blob)
+        {
+            return new LinkDirEntry(this, blob);
+        }
+
+        public ILinkBlobEntry CreateBlobEntry(Configuration.LinkDir dir, Configuration.LinkBlob blob)
+        {
+            return new LinkBlobEntry(this, dir, blob);
         }
     }
 }
