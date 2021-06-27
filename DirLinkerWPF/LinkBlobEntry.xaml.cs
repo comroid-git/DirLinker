@@ -65,8 +65,8 @@ namespace DirLinkerWPF
         }
 
         private void Button_Remove(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
+        {        
+            _window.Button_RemoveBlob(LinkDirEntry, this);
         }
     }
 }

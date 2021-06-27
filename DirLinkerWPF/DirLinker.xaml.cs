@@ -34,7 +34,6 @@ namespace DirLinkerWPF
             try
             {
                 Configuration.LoadConfig();
-                UpdateLinkList();
                 CleanupConfig();
             }
             catch (Exception e)
@@ -48,6 +47,7 @@ namespace DirLinkerWPF
         private void UpdateUI()
         {
             HaltConsoleBtn.Content = PauseConsolePrefix + (Config.PauseConsole ? "✔ yes" : "❌ no");
+            UpdateLinkList();
         }
 
         private void ApplyConfigToOS()
@@ -90,6 +90,20 @@ namespace DirLinkerWPF
             _blobs[blob.Directory] = blob;
             Config.LinkDirectories.Add(blob);
             return entry;
+        }
+
+        private void Remove(LinkDirEntry existing)
+        { 
+            for (int index = 0; index < Config.LinkDirectories.Count; index++) 
+            { 
+                var possibleDuplicate = Config.LinkDirectories[index];
+                
+                if (existing.LinkDirName.Equals(possibleDuplicate.Directory)) 
+                { 
+                    Config.LinkDirectories.RemoveAt(index);
+                    LinkList.Children.Remove(existing);
+                }
+            }
         }
 
         private LinkDirEntry GetOrCreateDir(DirectoryInfo dir)
@@ -173,6 +187,7 @@ namespace DirLinkerWPF
         {
             try
             {
+                CleanupConfig();
                 Configuration.SaveConfig();
                 ApplyConfigToOS();
             }
@@ -199,6 +214,7 @@ namespace DirLinkerWPF
         {
             try
             {
+                CleanupConfig();
                 Configuration.SaveConfig();
                 Process.Start("explorer.exe", Configuration.ConfigFile);
             }
@@ -218,6 +234,32 @@ namespace DirLinkerWPF
             catch (Exception ex)
             {
                 PromptText("Could not toggle Halting state: " + ex);
+            }
+        }
+
+        internal void Button_RemoveDir(LinkDirEntry linkDirEntry)
+        {
+            try
+            {
+                Remove(linkDirEntry);
+                UpdateUI();
+            }
+            catch (Exception ex)
+            {
+                PromptText($"Could not remove LinkDir {linkDirEntry.LinkDirName}: " + ex);
+            }
+        }
+
+        public void Button_RemoveBlob(LinkDirEntry linkDirEntry, LinkBlobEntry linkBlobEntry)
+        {
+            try
+            {
+                linkDirEntry.Remove(linkBlobEntry);
+                UpdateUI();
+            }
+            catch (Exception ex)
+            {
+                PromptText($"Could not remove LinkBlob {linkDirEntry.LinkDirName} - {linkBlobEntry.LinkName}: " + ex);
             }
         }
     }

@@ -58,6 +58,22 @@ namespace DirLinkerWPF
             return entry;
         }
 
+        public void Remove(LinkBlobEntry entry)
+        {
+            for (int index = 0; index < Blob.Links.Count; index++)
+            {
+                var possibleDuplicate = Blob.Links[index];
+
+                if (entry.LinkName.Equals(possibleDuplicate.LinkName))
+                {
+                    Blob.Links.RemoveAt(index);
+                    LinkList.Children.Remove(entry);
+                }
+            }
+
+            UpdateHeight();
+        }
+
         public LinkBlobEntry GetOrCreateLink(string linkName, DirectoryInfo targetDir)
         {
             Blobs.TryGetValue(linkName, out Configuration.LinkBlob add);
@@ -79,7 +95,7 @@ namespace DirLinkerWPF
 
         private void Button_Remove(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            _window.Button_RemoveDir(this);
         }
     }
 }
