@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using DirLinkerConfig;
+using Microsoft.VisualBasic.FileIO;
 using SymbolicLinkSupport;
 
 namespace HardLinkTool
@@ -47,35 +49,68 @@ namespace HardLinkTool
 
             if (Config.ConfigVersion != 1)
                 throw new InvalidDataException("Unknown configuration Version");
-            foreach (var it in Config.LinkDirectories)
+
+            foreach (var linkDir in Config.LinkDirectories)
+            foreach (var linkBlob in linkDir.Links)
+                new ApplicationBlob(linkDir, linkBlob).Apply();
+        }
+    }
+
+    internal sealed class ApplicationBlob
+    {
+        public Configuration.LinkDir Dir { get; }
+        internal Configuration.LinkBlob Blob { get; }
+        internal DirectoryInfo Base => Dir.Dir;
+        internal DirectoryInfo Link
+        {
+            get
             {
-                var parentDir = it.Dir;
-
-                if (!parentDir.Exists)
-                {
-                    Console.WriteLine($"Missing link base directory: {parentDir}; skipping entry");
-                    continue;
-                }
-
-                foreach (var blob in it.Links)
-                {
-                    var linkPath = Path.Combine(parentDir.FullName, blob.LinkName) + Path.DirectorySeparatorChar;
-                    var targetDir = new DirectoryInfo(blob.TargetDirectory);
-
-                    if (!targetDir.Exists)
-                    {
-                        Console.WriteLine($"Missing link target directory: {targetDir}; skipping entry");
-                        continue;
-                    }
-                    if (!Directory.Exists(linkPath))
-                    {
-                        Console.WriteLine($"Link directory already exists: {linkPath}; skipping entry");
-                        continue;
-                    }
-
-                    targetDir.CreateSymbolicLink(linkPath);
-                }
+                var dirName = Path.Combine(Base.FullName, Blob.LinkName);
+                if (!dirName.EndsWith(Path.DirectorySeparatorChar))
+                    dirName += Path.DirectorySeparatorChar;
+                return new DirectoryInfo(dirName);
             }
+        }
+        internal DirectoryInfo Target => Blob.TargetDir;
+
+        internal ApplicationBlob(Configuration.LinkDir dir, Configuration.LinkBlob blob)
+        {
+            Dir = dir;
+            Blob = blob;
+        }
+
+        internal void Apply()
+        {
+            if (Link.Exists)
+            {
+                // directory exists
+                if (Link.IsSymbolicLink())
+                {
+                    // nothing to do
+                    Console.WriteLine("Nothing to do for link " + Blob.LinkName);
+                    return;
+                }
+                // move the directory to target position and create symlink
+                Console.WriteLine($"Need to move link source {Link.FullName} to target directory {Target.FullName}");
+                FileSystem.MoveDirectory(Link.FullName, Target.FullName);
+                CreateSymlink();
+                return;
+            }
+            // only create symlink
+            CreateSymlink();
+        }
+
+        private void CreateSymlink(bool deleteIfPresent = false)
+        {
+            if (!Target.Exists)
+            {
+                Console.WriteLine($"Could not create link {Blob.LinkName}; target {Target.FullName} does not exist");
+                return;
+            }
+
+            if (Link.Exists && !Link.IsSymbolicLink() && deleteIfPresent)
+                Link.Delete(true);
+            Link.CreateSymbolicLink(Target.FullName);
         }
     }
 }

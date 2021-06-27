@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace DirLinkerConfig
@@ -28,6 +29,9 @@ namespace DirLinkerConfig
         public uint ConfigVersion = 1;
         [JsonProperty]
         public List<LinkDir> LinkDirectories = new List<LinkDir>();
+
+        [JsonIgnore]
+        public IEnumerable<LinkBlob> LinkBlobs => LinkDirectories.SelectMany(it => it.Links);
 
         public static void LoadConfig()
         {
