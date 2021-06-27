@@ -29,7 +29,7 @@ namespace HardLinkTool
         {
             try
             {
-                Console.WriteLine("Arguments: " + string.Join(' ', args));
+                Debug.WriteLine("Arguments: " + string.Join(' ', args));
                 Run(args);
             }
             catch (Exception ex)
