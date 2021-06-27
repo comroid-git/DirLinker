@@ -38,7 +38,7 @@ namespace DirLinkerWPF
             }
             catch (Exception e)
             {
-                PromptLine("Could not load configuration: " + e);
+                PromptText("Could not load configuration: " + e);
             }
         }
 
@@ -142,7 +142,7 @@ namespace DirLinkerWPF
             throw new NotImplementedException();
         }
 
-        private void PromptLine(object line)
+        private void PromptText(object line)
         {
             var str = line.ToString();
 
@@ -171,7 +171,7 @@ namespace DirLinkerWPF
             }
             catch (Exception ex)
             {
-                PromptLine("Could not apply Configuration: " + ex);
+                PromptText("Could not apply Configuration: " + ex);
             }
         }
 
@@ -184,7 +184,7 @@ namespace DirLinkerWPF
             }
             catch (Exception ex)
             {
-                PromptLine("Could not add link: " + ex);
+                PromptText("Could not add link: " + ex);
             }
         }
 
@@ -197,7 +197,7 @@ namespace DirLinkerWPF
             }
             catch (Exception ex)
             {
-                PromptLine("Could not open config: " + ex);
+                PromptText("Could not open config: " + ex);
             }
         }
     }
