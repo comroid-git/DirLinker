@@ -33,7 +33,7 @@ namespace HardLinkTool
 
         private static void Run(string[] args)
         {
-            if (args[0].Equals("--applyconfig"))
+            if (args[0].Equals(DirLinkerInfo.ApplyConfigArgument))
             {
                 var data = new string[args.Length - 1];
                 for (int i = 0; i < data.Length; i++)

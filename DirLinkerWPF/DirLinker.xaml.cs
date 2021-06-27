@@ -53,7 +53,7 @@ namespace DirLinkerWPF
             var startInfo = new ProcessStartInfo()
             {
                 FileName = "HardLinkTool.exe",
-                Arguments = $"--applyconfig {JsonConvert.SerializeObject(Config)}",
+                Arguments = $"{DirLinkerInfo.ApplyConfigArgument} {JsonConvert.SerializeObject(Config)}",
                 WindowStyle = ProcessWindowStyle.Hidden,
                 UseShellExecute = false,
                 Verb = "runas Administrator"
