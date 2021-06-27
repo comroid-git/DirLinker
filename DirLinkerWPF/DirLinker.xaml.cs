@@ -46,7 +46,7 @@ namespace DirLinkerWPF
         {
             var startInfo = new ProcessStartInfo();
             startInfo.FileName = "HardLinkTool.exe";
-            startInfo.Arguments = DirLinkerInfo.ApplyConfigArgument;
+            startInfo.Arguments = DirLinkerInfo.ApplyConfigArgument + ' ' + DirLinkerInfo.HaltOnErrorOnly;
             startInfo.UseShellExecute = true;
             startInfo.Verb = "runas";
             Process.Start(startInfo);

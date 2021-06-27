@@ -10,6 +10,7 @@ namespace DirLinkerConfig
     public static class DirLinkerInfo
     {
         public const string ApplyConfigArgument = "--applyConfig";
+        public const string HaltOnErrorOnly = "--haltOnError";
     }
 
     public class Configuration

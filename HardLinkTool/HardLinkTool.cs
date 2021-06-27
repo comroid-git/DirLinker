@@ -11,32 +11,39 @@ namespace HardLinkTool
     public class HardLinkTool
     {
         public static Configuration Config => Configuration.Instance;
+        public static bool HaltOnErrorOnly { get; private set; }
 
         public static void Main(string[] args)
         {
             try
             {
                 Debug.WriteLine("Arguments: " + string.Join(' ', args));
+                HaltOnErrorOnly = args.Contains(DirLinkerInfo.HaltOnErrorOnly);
                 Run(args);
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Internal Error: " + ex);
+                if (HaltOnErrorOnly)
+                {
+                    Console.WriteLine("Press any Key to exit");
+                    Console.ReadKey();
+                    return;
+                }
             }
-            finally
-            {
-                Console.WriteLine("Press any Key to exit");
-                Console.ReadKey();
-            }
+
+            if (HaltOnErrorOnly) 
+                return;
+            Console.WriteLine("Press any Key to exit");
+            Console.ReadKey();
         }
 
         private static void Run(string[] args)
         {
-            if (args[0].Equals(DirLinkerInfo.ApplyConfigArgument))
+            if (args.Contains(DirLinkerInfo.ApplyConfigArgument))
             {
                 Configuration.LoadConfig();
                 ApplyConfig();
-                return;
             }
 
             // handle other arguments
@@ -52,7 +59,6 @@ namespace HardLinkTool
 
             foreach (var linkDir in Config.LinkDirectories)
             foreach (var linkBlob in linkDir.Links)
-            {
                 try
                 {
                     new ApplicationBlob(linkDir, linkBlob).Apply();
@@ -61,7 +67,6 @@ namespace HardLinkTool
                 {
                     Console.WriteLine("An exception occurred: " + ex);
                 }
-            }
 
             Console.WriteLine("Done!");
         }
