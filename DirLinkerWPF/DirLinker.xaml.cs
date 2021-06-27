@@ -51,13 +51,10 @@ namespace DirLinkerWPF
             var startInfo = new ProcessStartInfo()
             {
                 FileName = "HardLinkTool.exe",
-                Arguments = $"--data \"{JsonConvert.SerializeObject(Config)}\"",
+                Arguments = $"--applyconfig {JsonConvert.SerializeObject(Config)}",
                 WindowStyle = ProcessWindowStyle.Hidden,
-                UseShellExecute = true,
-                Verb = "runas",
-                RedirectStandardInput = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true
+                UseShellExecute = false,
+                Verb = "runas Administrator"
             };
 
             Process.Start(startInfo);
@@ -137,6 +134,19 @@ namespace DirLinkerWPF
             return Add(new Configuration.LinkDir { Dir = dir });
         }
 
+        private void CleanupConfig()
+        {
+            HashSet<Configuration.LinkDir> duplicates = new HashSet<Configuration.LinkDir>();
+            foreach (var existing in Config.LinkDirectories.ToArray())
+            foreach (var linkDir in Config.LinkDirectories
+                .Where(it => it.Directory.Equals(existing.Directory))
+                .Where(it => it != existing))
+                duplicates.Add(linkDir);
+            foreach (var it in duplicates)
+                Config.LinkDirectories.Remove(it);
+            Debug.WriteLine("Config after cleanup: " + Config.LinkDirectories.Count);
+        }
+
         private void LoadConfig()
         {
             if (File.Exists(ConfigFile))
@@ -152,6 +162,7 @@ namespace DirLinkerWPF
 
         private void SaveConfig()
         {
+            CleanupConfig();
             //ApplyConfigFromUI();
             var data = JsonConvert.SerializeObject(Config);
             File.WriteAllText(ConfigFile, data);
