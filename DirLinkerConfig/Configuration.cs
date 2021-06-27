@@ -5,6 +5,11 @@ using Newtonsoft.Json;
 
 namespace DirLinkerConfig
 {
+    public static class DirLinkerInfo
+    {
+        public const string ApplyConfigArgument = "--applyConfig";
+    }
+
     public class Configuration
     {
         [JsonProperty]
