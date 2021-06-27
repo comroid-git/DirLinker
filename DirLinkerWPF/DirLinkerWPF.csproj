@@ -8,7 +8,10 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="SymbolicLinkSupport" Version="1.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HardLinkTool\HardLinkTool.csproj" />
   </ItemGroup>
 
 </Project>
