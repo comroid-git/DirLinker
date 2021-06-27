@@ -13,6 +13,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="40" />
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Row="0" Grid.Column="0" Text="Link Directory:" />
@@ -21,6 +22,6 @@
         <Button Grid.Row="0" Grid.Column="1" Content="Edit" Click="Button_Edit" IsEnabled="False" />
         <Button Grid.Row="0" Grid.Column="2" Content="Del" Click="Button_Remove" IsEnabled="False" />
 
-        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Vertical" Name="LinkList" />
+        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="9" Orientation="Vertical" Name="LinkList" />
     </Grid>
 </UserControl>
