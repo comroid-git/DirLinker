@@ -33,6 +33,7 @@ namespace DirLinkerWPF
             try
             {
                 Configuration.LoadConfig();
+                UpdateLinkList();
                 CleanupConfig();
             }
             catch (Exception e)
