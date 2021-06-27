@@ -120,13 +120,13 @@ namespace DirLinkerWPF
 
             foreach (var each in dirs)
             {
-                var entry = Config.GetOrCreate(each.Dir.FullName);
+                var entry = Config.Find(each.Dir.FullName);
 
                 var blobs = new List<Configuration.LinkBlob>(each.Links.Where(it => !entry.Links.Contains(it)));
                 
                 foreach (var blob in blobs)
                 {
-                    var blobEntry = each.GetOrCreate(blob.LinkName, blob.TargetDir);
+                    var blobEntry = each.Find(blob.LinkName);
                 }
             }
         }

@@ -66,7 +66,7 @@ namespace DirLinkerWPF
 
         private void Button_Remove(object sender, RoutedEventArgs e)
         {        
-            _window.Button_RemoveBlob(LinkDirEntry.Blob, this);
+            _window.Button_RemoveBlob(LinkDirEntry.Blob, Blob);
         }
     }
 }
