@@ -35,10 +35,12 @@ namespace DirLinkerWPF
             DataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "org.comroid");
             Directory.CreateDirectory(DataDir);
             ConfigFile = Path.Combine(DataDir, "dirLinker.json");
+            Closing += (sender, args) => SaveConfig();
 
             try
             {
                 LoadConfig();
+                CleanupConfig();
             }
             catch (Exception e)
             {
@@ -98,8 +100,6 @@ namespace DirLinkerWPF
         {
             var linkDirStr = LinkDirInput.Text;
             var linkDir = new DirectoryInfo(linkDirStr.EndsWith(Path.DirectorySeparatorChar) ? linkDirStr : linkDirStr + Path.DirectorySeparatorChar);
-            var linkNameStr = Path.Combine(linkDir.FullName, LinkNameInput.Text);
-            var link = new DirectoryInfo(linkNameStr = linkNameStr.EndsWith(Path.DirectorySeparatorChar) ? linkNameStr : linkNameStr + Path.DirectorySeparatorChar);
             var targetStr = TargetDirInput.Text;
             var targetDir = new DirectoryInfo(targetStr.EndsWith(Path.DirectorySeparatorChar) ? targetStr : targetStr + Path.DirectorySeparatorChar);
 
@@ -113,7 +113,7 @@ namespace DirLinkerWPF
             */
 
             var dirEntry = GetOrCreateDir(linkDir);
-            var linkEntry = dirEntry.GetOrCreateLink(linkNameStr, targetDir);
+            var linkEntry = dirEntry.GetOrCreateLink(LinkNameInput.Text, targetDir);
         }
 
         private LinkDirEntry Add(Configuration.LinkDir blob)
