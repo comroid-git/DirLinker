@@ -109,6 +109,7 @@ namespace DirLinkerWPF
             LinkList.Children.Add(entry);
             blob.Entry = entry;
             _blobs[blob.Directory] = blob;
+            Config.LinkDirectories.Add(blob);
             return entry;
         }
 
@@ -134,6 +135,7 @@ namespace DirLinkerWPF
 
         private void SaveConfig()
         {
+            //ApplyConfigFromUI();
             var data = JsonConvert.SerializeObject(Config);
             File.WriteAllText(ConfigFile, data);
             Debug.WriteLine("Config was saved. Data: " + data);

@@ -19,7 +19,7 @@ namespace DirLinkerWPF
             [JsonProperty]
             public List<LinkBlob> Links = new List<LinkBlob>();
 
-            public DirectoryInfo Dir
+            internal DirectoryInfo Dir
             {
                 get => new DirectoryInfo(Directory);
                 set => Directory = value.FullName;
@@ -40,7 +40,7 @@ namespace DirLinkerWPF
             [JsonProperty]
             public string TargetDirectory;
 
-            public DirectoryInfo TargetDir
+            internal DirectoryInfo TargetDir
             {
                 get => new DirectoryInfo(TargetDirectory);
                 set => TargetDirectory = value.FullName;

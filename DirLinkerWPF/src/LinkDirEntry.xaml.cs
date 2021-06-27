@@ -53,6 +53,7 @@ namespace DirLinkerWPF.src
             blob.Entry = entry;
             _blobs[blob.LinkName] = blob;
             UpdateHeight();
+            Blob.Links.Add(blob);
             return entry;
         }
 
