@@ -25,6 +25,7 @@ namespace DirLinkerWPF
         public readonly string DataDir;
         public readonly string ConfigFile;
         public Configuration Config { get; private set; }
+        private Dictionary<string, Configuration.LinkDir> _blobs = new Dictionary<string, Configuration.LinkDir>();
 
         public MainWindow()
         {
@@ -102,20 +103,20 @@ namespace DirLinkerWPF
             PromptLine("Created " + linkEntry);
         }
 
-        private LinkDirEntry Add(Configuration.LinkDir linkDir)
+        private LinkDirEntry Add(Configuration.LinkDir blob)
         {
-            var entry = new LinkDirEntry(this, linkDir);
+            var entry = new LinkDirEntry(this, blob);
             LinkList.Children.Add(entry);
-            linkDir.Entry = entry;
+            blob.Entry = entry;
+            _blobs[blob.Directory] = blob;
             return entry;
         }
 
         private LinkDirEntry GetOrCreateDir(DirectoryInfo dir)
         {
-            var add = LinkList.Children.Cast<LinkDirEntry>()
-                .FirstOrDefault(it => it.Blob.Dir == dir);
+            _blobs.TryGetValue(dir.FullName, out Configuration.LinkDir add);
             if (add != null)
-                return add;
+                return add.Entry;
             return Add(new Configuration.LinkDir { Dir = dir });
         }
 
