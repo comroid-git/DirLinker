@@ -74,7 +74,7 @@ namespace DirLinkerWPF
 
         private void Button_Edit(object sender, RoutedEventArgs e)
         {
-            //todo Window.StartEditDirectory(this);
+            throw new NotImplementedException();
         }
 
         private void Button_Remove(object sender, RoutedEventArgs e)
