@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using DirLinkerConfig;
 using DirLinkerWPF.src;
-using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using SymbolicLinkSupport;
-using FileSystem = Microsoft.VisualBasic.FileIO.FileSystem;
 
 namespace DirLinkerWPF
 {
