@@ -22,7 +22,7 @@ namespace HardLinkTool
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Internal Error: " + ex);
+                Console.WriteLine("Internal Error: " + ex);
             }
             finally
             {
