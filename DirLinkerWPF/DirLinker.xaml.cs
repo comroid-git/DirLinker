@@ -57,7 +57,7 @@ namespace DirLinkerWPF
             var startInfo = new ProcessStartInfo()
             {
                 FileName = "HardLinkTool.exe",
-                Arguments = DirLinkerInfo.ApplyConfigArgument + " \"" + JsonConvert.SerializeObject(Config).Replace("\"","\\\"") + '"',
+                Arguments = DirLinkerInfo.ApplyConfigArgument,
                 WindowStyle = ProcessWindowStyle.Hidden,
                 UseShellExecute = false,
                 Verb = "runas Administrator"
