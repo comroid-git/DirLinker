@@ -77,7 +77,7 @@ namespace DirLinkerWPF
             */
 
             var dirEntry = GetOrCreateDir(linkDir);
-            var linkEntry = dirEntry.GetOrCreateLink(LinkNameInput.Text, targetDir);
+            var linkEntry = linkDir.GetOrCreateLink(LinkNameInput.Text, targetDir);
 
             LinkDirInput.Text = "";
             LinkDirInput.IsEnabled = true;
@@ -158,7 +158,7 @@ namespace DirLinkerWPF
                 
                 foreach (var blob in blobs)
                 {
-                    var blobEntry = entry.GetOrCreateLink(blob.LinkName, blob.TargetDir);
+                    var blobEntry = each.GetOrCreate(blob.LinkName, blob.TargetDir);
                 }
             }
         }

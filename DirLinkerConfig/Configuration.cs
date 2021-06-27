@@ -39,6 +39,14 @@ namespace DirLinkerConfig
         [JsonIgnore]
         public IEnumerable<LinkBlob> LinkBlobs => LinkDirectories.SelectMany(it => it.Links);
 
+        public LinkDir GetOrCreate(string path)
+        {
+            var it = LinkDirectories.FirstOrDefault(e => e.Directory.Equals(path));
+            if (it == null)
+                it = new LinkDir { Directory = path };
+            return it;
+        }
+
         public static void LoadConfig()
         {
             Configuration newData;
@@ -80,6 +88,12 @@ namespace DirLinkerConfig
                 var entry = Producer?.CreateDirEntry(linkDir);
                 linkDir.Entry = entry;
             }
+
+            foreach (var each in LinkDirectories)
+            {
+                each.Config = this;
+                each.Producer = Producer;
+            }
         }
 
         public static void SaveConfig()
@@ -98,6 +112,8 @@ namespace DirLinkerConfig
 
         public class LinkDir : IUpdateable<LinkDir>
         {
+            [JsonIgnore] 
+            public Configuration Config;
             [JsonProperty]
             public string Directory;
             [JsonProperty]
@@ -113,6 +129,14 @@ namespace DirLinkerConfig
             public IEntryProducer Producer;
             [JsonIgnore]
             public ILinkDirEntry Entry;
+
+            public LinkBlob GetOrCreate(string name, DirectoryInfo directory)
+            {
+                var it = Links.FirstOrDefault(e => e.LinkName.Equals(name));
+                if (it == null)
+                    it = new LinkBlob { LinkName = name, TargetDir = directory };
+                return it;
+            }
 
             public void UpdateFrom(LinkDir newData)
             {
@@ -137,6 +161,9 @@ namespace DirLinkerConfig
                     var entry = Producer?.CreateBlobEntry(this, linkBlob);
                     linkBlob.Entry = entry;
                 }
+                
+                foreach (var each in Links) 
+                    each.DirBlob = this;
             }
         }
 
@@ -159,6 +186,8 @@ namespace DirLinkerConfig
                 set => TargetDirectory = value.FullName;
             }
 
+            [JsonIgnore] 
+            public LinkDir DirBlob;
             [JsonIgnore]
             public ILinkBlobEntry Entry;
 
@@ -178,16 +207,16 @@ namespace DirLinkerConfig
         void UpdateFrom(T newData);
     }
     
-    public interface ILinkBlobEntry
-    {
-        string LinkName { get; set; }
-        string TargetName { get; set; }
-    }
-    
     public interface ILinkDirEntry
     {
         bool IsDemo { get; }
         string LinkDirName { get; set; }
+    }
+    
+    public interface ILinkBlobEntry
+    {
+        string LinkName { get; set; }
+        string TargetName { get; set; }
     }
 
     public interface IEntryProducer
