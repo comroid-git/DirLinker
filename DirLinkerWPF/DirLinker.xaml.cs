@@ -13,9 +13,9 @@ using SymbolicLinkSupport;
 namespace DirLinkerWPF
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for DirLinker.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class DirLinker : Window
     {
         public const int WindowHeight = 600;
         public const int WindowWidth = 840;
@@ -24,7 +24,7 @@ namespace DirLinkerWPF
         public Configuration Config { get; private set; }
         private Dictionary<string, Configuration.LinkDir> _blobs = new Dictionary<string, Configuration.LinkDir>();
 
-        public MainWindow()
+        public DirLinker()
         {
             Icon = new BitmapImage(new Uri("https://cdn.comroid.org/img/logo-clean.ico"));
             DataContext = this;

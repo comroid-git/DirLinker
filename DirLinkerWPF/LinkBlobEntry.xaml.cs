@@ -32,7 +32,7 @@ namespace DirLinkerWPF
             new PropertyMetadata(null)
         );
 
-        private readonly MainWindow _window;
+        private readonly DirLinker _window;
         public readonly LinkDirEntry LinkDirEntry;
         public readonly Configuration.LinkBlob Blob;
         public bool IsDemo => _window == null;
@@ -48,7 +48,7 @@ namespace DirLinkerWPF
             set => SetValue(TargetNameProperty, Blob.TargetDirectory = value);
         }
 
-        public LinkBlobEntry(MainWindow window, LinkDirEntry linkDirEntry, Configuration.LinkBlob blob)
+        public LinkBlobEntry(DirLinker window, LinkDirEntry linkDirEntry, Configuration.LinkBlob blob)
         {
             DataContext = this;
             InitializeComponent();

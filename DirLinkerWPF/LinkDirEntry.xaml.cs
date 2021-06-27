@@ -27,7 +27,7 @@ namespace DirLinkerWPF
             typeof(LinkDirEntry),
             new PropertyMetadata(null)
         );
-        private MainWindow _window;
+        private DirLinker _window;
         public Configuration.LinkDir Blob;
         public bool IsDemo => _window == null;
         internal Dictionary<string, Configuration.LinkBlob> Blobs = new Dictionary<string, Configuration.LinkBlob>();
@@ -38,7 +38,7 @@ namespace DirLinkerWPF
             set => SetValue(LinkDirNameProperty, Blob.Directory = value);
         }
 
-        public LinkDirEntry(MainWindow window, Configuration.LinkDir blob)
+        public LinkDirEntry(DirLinker window, Configuration.LinkDir blob)
         {
             DataContext = this;
             InitializeComponent();
