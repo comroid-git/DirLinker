@@ -40,7 +40,7 @@ namespace DirLinkerWPF
         public void ReloadView()
         {
             foreach (var each in Blob.Links.Where(it => it.Entry == null))
-                each.Entry = _window.CreateBlobEntry(each.DirBlob, each);
+                each.Entry = _window.CreateBlobEntry(Blob, each);
             ClearView();
             foreach (var each in Blob.Links)
                 AddLinkToView(each.Entry);
