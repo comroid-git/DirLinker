@@ -10,8 +10,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using DirLinkerConfig;
 
-namespace DirLinkerWPF.src
+namespace DirLinkerWPF
 {
     /// <summary>
     /// Interaction logic for LinkBlobEntry.xaml

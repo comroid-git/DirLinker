@@ -7,7 +7,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using DirLinkerConfig;
-using DirLinkerWPF.src;
 using Newtonsoft.Json;
 using SymbolicLinkSupport;
 
@@ -118,7 +117,7 @@ namespace DirLinkerWPF
         {
             _blobs.TryGetValue(dir.FullName, out Configuration.LinkDir add);
             if (add != null)
-                return add.Entry;
+                return add.Entry as LinkDirEntry;
             return Add(new Configuration.LinkDir { Dir = dir });
         }
 

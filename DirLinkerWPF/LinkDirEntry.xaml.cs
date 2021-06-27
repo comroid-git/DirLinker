@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DirLinkerConfig;
 
-namespace DirLinkerWPF.src
+namespace DirLinkerWPF
 {
     /// <summary>
     /// Interaction logic for LinkDirEntry.xaml
@@ -62,7 +62,7 @@ namespace DirLinkerWPF.src
         {
             Blobs.TryGetValue(linkName, out Configuration.LinkBlob add);
             if (add != null)
-                return add.Entry;
+                return add.Entry as LinkBlobEntry;
             return Add(new Configuration.LinkBlob { LinkName = linkName, TargetDir = targetDir });
         }
 
