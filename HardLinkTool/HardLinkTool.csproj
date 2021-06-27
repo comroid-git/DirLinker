@@ -4,6 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <StartupObject>HardLinkTool.HardLinkTool</StartupObject>
+    <Version>0.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

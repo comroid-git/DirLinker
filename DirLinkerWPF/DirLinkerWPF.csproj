@@ -6,6 +6,7 @@
     <UseWPF>true</UseWPF>
     <ApplicationIcon>logo-clean.ico</ApplicationIcon>
     <StartupObject>DirLinkerWPF.App</StartupObject>
+    <Version>0.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
