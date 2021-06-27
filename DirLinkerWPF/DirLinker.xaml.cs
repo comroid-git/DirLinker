@@ -60,40 +60,6 @@ namespace DirLinkerWPF
             };
 
             Process.Start(startInfo);
-
-            /*
-            if (Config.ConfigVersion != 1)
-                throw new InvalidDataException("Unknown configuration Version");
-            foreach (var it in Config.LinkDirectories)
-            {
-                var parentDir = it.Dir;
-
-                if (!parentDir.Exists)
-                {
-                    PromptLine($"Missing link base directory: {parentDir}; skipping entry");
-                    continue;
-                }
-
-                foreach (var blob in it.Links)
-                {
-                    var linkPath = Path.Combine(parentDir.FullName, blob.LinkName) + Path.DirectorySeparatorChar;
-                    var targetDir = new DirectoryInfo(blob.TargetDirectory);
-
-                    if (!targetDir.Exists)
-                    {
-                        PromptLine($"Missing link target directory: {targetDir}; skipping entry");
-                        continue;
-                    }
-                    if (!Directory.Exists(linkPath))
-                    {
-                        PromptLine($"Link directory already exists: {linkPath}; skipping entry");
-                        continue;
-                    }
-
-                    targetDir.CreateSymbolicLink(linkPath);
-                }
-            }
-            */
         }
 
         private void AddLinkFromInput()
