@@ -48,9 +48,8 @@ namespace DirLinkerWPF
             {
                 FileName = "HardLinkTool.exe",
                 Arguments = DirLinkerInfo.ApplyConfigArgument,
-                WindowStyle = ProcessWindowStyle.Hidden,
                 UseShellExecute = false,
-                Verb = "runas Administrator"
+                Verb = "runas"
             };
 
             Process.Start(startInfo);
