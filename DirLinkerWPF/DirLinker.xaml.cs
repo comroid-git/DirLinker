@@ -23,7 +23,6 @@ namespace DirLinkerWPF
 
         public DirLinker()
         {
-            Icon = new BitmapImage(new Uri("https://cdn.comroid.org/img/logo-clean.ico"));
             DataContext = this;
             InitializeComponent();
             Height = WindowHeight;
