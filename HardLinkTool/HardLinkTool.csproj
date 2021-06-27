@@ -8,10 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SymbolicLinkSupport" Version="1.2.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\DirLinkerConfig\DirLinkerConfig.csproj" />
   </ItemGroup>
 

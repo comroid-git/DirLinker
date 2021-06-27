@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
+using SymbolicLinkSupport;
 
 namespace DirLinkerConfig
 {
@@ -186,7 +187,15 @@ namespace DirLinkerConfig
             public bool Remove(string linkName)
             {
                 var link = Find(linkName);
-                return link != null && Links.Remove(link);
+                if (link == null)
+                    return false;
+                /*
+                 TODO: delete link on removed from config
+                var lnk = link.Link;
+                if (lnk.Exists && lnk.IsSymbolicLink())
+                    lnk.Delete(false);
+                */
+                return Links.Remove(link);
             }
 
             public void UpdateFrom(LinkDir newData = null)
@@ -237,6 +246,17 @@ namespace DirLinkerConfig
                 set => TargetDirectory = value.FullName;
             }
 
+            [JsonIgnore]
+            public DirectoryInfo Link
+            {
+                get
+                {
+                    var combine = Path.Combine(DirBlob.Directory, LinkName);
+                    if (!combine.EndsWith(Path.DirectorySeparatorChar))
+                        combine += Path.DirectorySeparatorChar;
+                    return new DirectoryInfo(combine);
+                }
+            }
             [JsonIgnore] 
             public readonly LinkDir DirBlob;
             [JsonIgnore]
