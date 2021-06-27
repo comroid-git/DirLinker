@@ -85,6 +85,8 @@ namespace DirLinkerWPF
             LinkNameInput.IsEnabled = true;
             TargetDirInput.Text = "";
             TargetDirInput.IsEnabled = true;
+
+            ReloadView();
         }
 
         private void CleanupConfig()

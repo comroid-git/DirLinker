@@ -16,5 +16,4 @@ DirLinker helps you by providing an interface to first set up all hard links you
 - 8. During this process, if the `HardLinkTool` sees a Directory exist at the Link Directory, **it attempts to Move it to the target directory, and then creates the Hard link**
 
 ## Known Problems
-- Creating two separate Links in the same Link Directory is currently not supported by Configuration (shitty code lol, go ahead and fix it)
 - Editing existing entries is currently not implemented

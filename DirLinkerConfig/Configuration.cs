@@ -52,6 +52,7 @@ namespace DirLinkerConfig
             {
                 return dir;
             }
+            Debug.WriteLine("Warning: Could not find LinkDir " + path);
 
             var blob = new LinkDir(this, Producer) { Directory = path };
             Add(blob);
@@ -167,6 +168,7 @@ namespace DirLinkerConfig
                 {
                     return find;
                 }
+                Debug.WriteLine("Warning: Could not find LinkBlob " + name);
 
                 var blob = new LinkBlob(this) { LinkName = name, TargetDir = directory };
                 Add(blob);
