@@ -10,8 +10,10 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using DirLinkerWPF.src;
+using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using SymbolicLinkSupport;
+using FileSystem = Microsoft.VisualBasic.FileIO.FileSystem;
 
 namespace DirLinkerWPF
 {
@@ -65,7 +67,7 @@ namespace DirLinkerWPF
 
                 foreach (var blob in it.Links)
                 {
-                    var linkPath = Path.Combine(parentDir.FullName, blob.LinkName);
+                    var linkPath = Path.Combine(parentDir.FullName, blob.LinkName) + Path.DirectorySeparatorChar;
                     var targetDir = new DirectoryInfo(blob.TargetDirectory);
 
                     if (!targetDir.Exists)
@@ -91,12 +93,14 @@ namespace DirLinkerWPF
             var link = new DirectoryInfo(Path.Combine(linkDir.FullName, linkName));
             var targetDir = new DirectoryInfo(TargetDirInput.Text);
 
+            /*
             if (!linkDir.Exists)
                 throw new InvalidOperationException("Link parent directory is missing: " + linkDir.FullName);
             if (link.Exists)
                 throw new InvalidOperationException("Link target already exists: " + link.FullName);
             if (!targetDir.Exists)
                 throw new InvalidOperationException("Link target directory is missing: " + targetDir.FullName);
+            */
 
             var dirEntry = GetOrCreateDir(linkDir);
             var linkEntry = dirEntry.GetOrCreateLink(linkName, targetDir);
@@ -131,6 +135,7 @@ namespace DirLinkerWPF
 
             if (Config == null)
                 throw new InvalidDataException("Could not load configuration");
+            UpdateLinkList();
         }
 
         private void SaveConfig()
@@ -145,6 +150,20 @@ namespace DirLinkerWPF
         {
             if (Config.ConfigVersion != 1)
                 throw new InvalidDataException("Unknown configuration Version");
+
+            var dirs = new List<Configuration.LinkDir>(Config.LinkDirectories.Where(it => !_blobs.Values.Contains(it)));
+
+            foreach (var each in dirs)
+            {
+                var entry = GetOrCreateDir(each.Dir);
+
+                var blobs = new List<Configuration.LinkBlob>(each.Links.Where(it => !entry.Blobs.Values.Contains(it)));
+                
+                foreach (var blob in blobs)
+                {
+                    var blobEntry = entry.GetOrCreateLink(blob.LinkName, blob.TargetDir);
+                }
+            }
         }
 
         private Configuration CreateDefaultConfig()
@@ -182,8 +201,8 @@ namespace DirLinkerWPF
         {
             try
             {
-                ApplyConfigToOS();
                 SaveConfig();
+                ApplyConfigToOS();
             }
             catch (Exception ex)
             {
