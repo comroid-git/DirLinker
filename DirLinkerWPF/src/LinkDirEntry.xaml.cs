@@ -48,18 +48,19 @@ namespace DirLinkerWPF.src
         public LinkBlobEntry Add(Configuration.LinkBlob blob)
         {
             var entry = new LinkBlobEntry(_window, this, blob);
-            if (!LinkList.Children.Contains(entry))
-                LinkList.Children.Add(entry);
-            UpdateHeight();
+            LinkList.Children.Add(entry);
             blob.Entry = entry;
+            UpdateHeight();
             return entry;
         }
 
         public LinkBlobEntry GetOrCreateLink(string linkName, DirectoryInfo targetDir)
         {
-            return LinkList.Children.Cast<LinkBlobEntry>()
-                       .FirstOrDefault(it => it.LinkName.Equals(linkName))
-                   ?? Add(new Configuration.LinkBlob { LinkName = linkName, TargetDir = targetDir });
+            var add = LinkList.Children.Cast<LinkBlobEntry>()
+                .FirstOrDefault(it => it.LinkName.Equals(linkName));
+            if (add != null)
+                return add;
+            return Add(new Configuration.LinkBlob { LinkName = linkName, TargetDir = targetDir });
         }
 
         private void UpdateHeight()

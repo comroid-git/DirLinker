@@ -104,18 +104,19 @@ namespace DirLinkerWPF
 
         private LinkDirEntry Add(Configuration.LinkDir linkDir)
         {
-            var yield = new LinkDirEntry(this, linkDir);
-            if (!LinkList.Children.Contains(yield)) 
-                LinkList.Children.Add(linkDir.Entry = yield);
-            return yield;
+            var entry = new LinkDirEntry(this, linkDir);
+            LinkList.Children.Add(entry);
+            linkDir.Entry = entry;
+            return entry;
         }
 
         private LinkDirEntry GetOrCreateDir(DirectoryInfo dir)
         {
-            // todo Always creates
-            return LinkList.Children.Cast<LinkDirEntry>()
-                       .FirstOrDefault(it => it.Blob.Dir == dir)
-                   ?? Add(new Configuration.LinkDir {Dir = dir});
+            var add = LinkList.Children.Cast<LinkDirEntry>()
+                .FirstOrDefault(it => it.Blob.Dir == dir);
+            if (add != null)
+                return add;
+            return Add(new Configuration.LinkDir { Dir = dir });
         }
 
         private void LoadConfig()
