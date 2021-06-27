@@ -613,3 +613,4 @@ fabric.properties
 .vs/**
 .vscode/**
 .idea/**
+Installer.exe
