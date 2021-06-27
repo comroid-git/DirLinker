@@ -38,7 +38,6 @@ namespace HardLinkTool
                 for (int i = 0; i < data.Length; i++)
                     data[i] = args[i + 1];
                 var value = string.Join(' ', data);
-                Console.WriteLine("Value: " + value);
                 Config = JsonConvert.DeserializeObject<Configuration>(value);
                 ApplyConfig();
                 return;
