@@ -52,7 +52,18 @@ namespace HardLinkTool
 
             foreach (var linkDir in Config.LinkDirectories)
             foreach (var linkBlob in linkDir.Links)
-                new ApplicationBlob(linkDir, linkBlob).Apply();
+            {
+                try
+                {
+                    new ApplicationBlob(linkDir, linkBlob).Apply();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An exception occurred: " + ex);
+                }
+            }
+
+            Console.WriteLine("Done!");
         }
     }
 
@@ -77,6 +88,7 @@ namespace HardLinkTool
         {
             Dir = dir;
             Blob = blob;
+            Console.WriteLine($"Configuring symlink: {Link.FullName} --> {Target.FullName}");
         }
 
         internal void Apply()
@@ -87,7 +99,7 @@ namespace HardLinkTool
                 if (Link.IsSymbolicLink())
                 {
                     // nothing to do
-                    Console.WriteLine("Nothing to do for link " + Blob.LinkName);
+                    Console.WriteLine("Nothing to do");
                     return;
                 }
                 // move the directory to target position and create symlink
