@@ -27,7 +27,6 @@ namespace DirLinkerConfig
             DataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "org.comroid");
             ConfigFile = Path.Combine(DataDir, "dirLinker.json");
             Directory.CreateDirectory(DataDir);
-            LoadConfig();
         }
 
         [JsonProperty]
@@ -54,10 +53,17 @@ namespace DirLinkerConfig
                 return dir;
             }
 
-            var blob = new LinkDir { Directory = path };
-            LinkDirectories.Add(blob);
-            Producer?.AddDirToView(LinkDirectories.Count);
+            var blob = new LinkDir(this, Producer) { Directory = path };
+            Add(blob);
             return blob;
+        }
+
+        public void Add(LinkDir blob)
+        {
+            var entry = Producer?.CreateDirEntry(blob);
+            blob.Entry = entry;
+            LinkDirectories.Add(blob);
+            Producer?.AddDirToView(entry);
         }
 
         public bool Remove(string path)
@@ -66,7 +72,7 @@ namespace DirLinkerConfig
             return dir != null && LinkDirectories.Remove(dir);
         }
 
-        public static void LoadConfig()
+        public static void LoadConfig(IEntryProducer producer = null)
         {
             Configuration newData;
             if (File.Exists(ConfigFile))
@@ -76,6 +82,8 @@ namespace DirLinkerConfig
             }
             else newData = CreateDefaultConfig();
 
+            if (producer != null)
+                newData.Producer = producer;
             if (newData == null)
                 throw new InvalidDataException("Could not load configuration");
             if (Instance == null) 
@@ -99,23 +107,12 @@ namespace DirLinkerConfig
                 }
 
                 foreach (var newDir in news)
-                    LinkDirectories.Add(newDir);
-            }
-
-            foreach (var linkDir in LinkDirectories.Where(it => it.Entry == null))
-            {
-                var entry = Producer?.CreateDirEntry(linkDir);
-                linkDir.Entry = entry;
+                    Add(newDir);
             }
 
             Producer?.ClearView();
-            for (var i = 0; i < LinkDirectories.Count; i++)
-            {
-                Producer?.AddDirToView(i);
-                var each = LinkDirectories[i];
-                each.Config = this;
-                each.Producer = Producer;
-            }
+            foreach (var each in LinkDirectories) 
+                Producer?.AddDirToView(each.Entry);
         }
 
         public static void SaveConfig()
@@ -134,8 +131,14 @@ namespace DirLinkerConfig
 
         public class LinkDir : IUpdateable<LinkDir>
         {
+            public LinkDir(Configuration config, IEntryProducer producer)
+            {
+                Config = config;
+                Producer = producer;
+            }
+
             [JsonIgnore] 
-            public Configuration Config;
+            public readonly Configuration Config;
             [JsonProperty]
             public string Directory;
             [JsonProperty]
@@ -147,7 +150,7 @@ namespace DirLinkerConfig
                 set => Directory = value.FullName;
             }
             [JsonIgnore] 
-            public IEntryProducer Producer;
+            public readonly IEntryProducer Producer;
             [JsonIgnore]
             public ILinkDirEntry Entry;
 
@@ -165,10 +168,17 @@ namespace DirLinkerConfig
                     return find;
                 }
 
-                var blob = new LinkBlob { LinkName = name, TargetDir = directory };
-                Links.Add(blob);
-                Entry?.AddLinkToView(Links.Count);
+                var blob = new LinkBlob(this) { LinkName = name, TargetDir = directory };
+                Add(blob);
                 return blob;
+            }
+
+            public void Add(LinkBlob blob)
+            {
+                var entry = Producer?.CreateBlobEntry(this, blob);
+                blob.Entry = entry;
+                Links.Add(blob);
+                Entry?.AddLinkToView(entry);
             }
 
             public bool Remove(string linkName)
@@ -192,27 +202,22 @@ namespace DirLinkerConfig
                     }
 
                     foreach (var newBlob in news)
-                        Links.Add(newBlob);
+                        Add(newBlob);
                 }
-
-                foreach (var linkBlob in Links.Where(it => it.Entry == null))
-                {
-                    var entry = Producer?.CreateBlobEntry(this, linkBlob);
-                    linkBlob.Entry = entry;
-                }
-
+                
                 Entry?.ClearView();
-                for (var i = 0; i < Links.Count; i++)
-                {
-                    Entry?.AddLinkToView(i);
-                    var each = Links[i];
-                    each.DirBlob = this;
-                }
+                foreach (var each in Links) 
+                    Entry?.AddLinkToView(each.Entry);
             }
         }
 
         public class LinkBlob : IUpdateable<LinkBlob>
         {
+            public LinkBlob(LinkDir dirBlob)
+            {
+                DirBlob = dirBlob;
+            }
+
             private string _linkName;
             [JsonProperty]
             public string LinkName
@@ -231,7 +236,7 @@ namespace DirLinkerConfig
             }
 
             [JsonIgnore] 
-            public LinkDir DirBlob;
+            public readonly LinkDir DirBlob;
             [JsonIgnore]
             public ILinkBlobEntry Entry;
 
@@ -248,21 +253,23 @@ namespace DirLinkerConfig
 
     public interface IEntryProducer
     {
+        void ReloadView();
         void ClearView();
-        void AddDirToView(int index);
+        void AddDirToView(ILinkDirEntry entry);
         ILinkDirEntry CreateDirEntry(Configuration.LinkDir blob);
         ILinkBlobEntry CreateBlobEntry(Configuration.LinkDir dir, Configuration.LinkBlob blob);
     }
 
-    public interface IUpdateable<T>
+    public interface IUpdateable<in T>
     {
         void UpdateFrom(T newData);
     }
     
     public interface ILinkDirEntry
     {
+        void ReloadView();
         void ClearView();
-        void AddLinkToView(int index);
+        void AddLinkToView(ILinkBlobEntry entry);
     }
     
     public interface ILinkBlobEntry

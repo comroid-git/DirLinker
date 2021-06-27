@@ -31,6 +31,7 @@ namespace DirLinkerWPF
 
             try
             {
+                Configuration.LoadConfig(this);
                 CleanupConfig();
             }
             catch (Exception e)
@@ -44,6 +45,7 @@ namespace DirLinkerWPF
         private void UpdateUI()
         {
             HaltConsoleBtn.Content = PauseConsolePrefix + (Config.PauseConsole ? "✔ yes" : "❌ no");
+            ReloadView();
         }
 
         private void ApplyConfigToOS()
@@ -193,29 +195,41 @@ namespace DirLinkerWPF
             }
         }
 
-        internal void Button_RemoveDir(LinkDirEntry linkDirEntry)
+        internal void Button_RemoveDir(LinkDirEntry linkDir)
         {
             try
             {
-                Config.Remove(linkDirEntry.Blob.Directory);
+                Config.Remove(linkDir.Blob.Directory);
                 UpdateUI();
             }
             catch (Exception ex)
             {
-                PromptText($"Could not remove LinkDir {linkDirEntry.LinkDirName}: " + ex);
+                PromptText($"Could not remove LinkDir {linkDir.LinkDirName}: " + ex);
             }
         }
 
-        public void Button_RemoveBlob(Configuration.LinkDir linkDirEntry, Configuration.LinkBlob linkBlobEntry)
+        public void Button_RemoveBlob(Configuration.LinkDir linkDir, Configuration.LinkBlob linkBlob)
         {
             try
             {
-                linkDirEntry.Remove(linkBlobEntry.LinkName);
+                Config.Find(linkDir.Directory)?.Remove(linkBlob.LinkName);
                 UpdateUI();
             }
             catch (Exception ex)
             {
-                PromptText($"Could not remove LinkBlob {linkDirEntry.Directory} - {linkBlobEntry.LinkName}: " + ex);
+                PromptText($"Could not remove LinkBlob {linkDir.Directory} - {linkBlob.LinkName}: " + ex);
+            }
+        }
+
+        public void ReloadView()
+        {
+            foreach (var each in Config.LinkDirectories.Where(it => it.Entry == null))
+                each.Entry = CreateDirEntry(each);
+            ClearView();
+            foreach (var each in Config.LinkDirectories)
+            {
+                AddDirToView(each.Entry);
+                each.Entry.ReloadView();
             }
         }
 
@@ -224,11 +238,11 @@ namespace DirLinkerWPF
             LinkList.Children.Clear();
         }
 
-        public void AddDirToView(int index)
+        public void AddDirToView(ILinkDirEntry entry)
         {
-            if (!(Config.LinkDirectories[index].Entry is LinkDirEntry value))
-                return;
-            LinkList.Children.Add(value);
+            if (entry is LinkDirEntry value) 
+                LinkList.Children.Add(value);
+
         }
 
         public ILinkDirEntry CreateDirEntry(Configuration.LinkDir blob)

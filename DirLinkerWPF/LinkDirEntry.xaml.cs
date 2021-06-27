@@ -37,16 +37,25 @@ namespace DirLinkerWPF
             set => SetValue(LinkDirNameProperty, Blob.Directory = value);
         }
 
+        public void ReloadView()
+        {
+            foreach (var each in Blob.Links.Where(it => it.Entry == null))
+                each.Entry = _window.CreateBlobEntry(each.DirBlob, each);
+            ClearView();
+            foreach (var each in Blob.Links)
+                AddLinkToView(each.Entry);
+        }
+
         public void ClearView()
         {
             LinkList.Children.Clear();
+            UpdateHeight();
         }
 
-        public void AddLinkToView(int index)
+        public void AddLinkToView(ILinkBlobEntry entry)
         {
-            if (!(Blob.Links[index].Entry is LinkBlobEntry value))
-                return;
-            LinkList.Children.Add(value);
+            if (entry is LinkBlobEntry value) 
+                LinkList.Children.Add(value);
             UpdateHeight();
         }
 
