@@ -44,14 +44,11 @@ namespace DirLinkerWPF
 
         private void ApplyConfigToOS()
         {
-            var startInfo = new ProcessStartInfo()
-            {
-                FileName = "HardLinkTool.exe",
-                Arguments = DirLinkerInfo.ApplyConfigArgument,
-                UseShellExecute = false,
-                Verb = "runas"
-            };
-
+            var startInfo = new ProcessStartInfo();
+            startInfo.FileName = "HardLinkTool.exe";
+            startInfo.Arguments = DirLinkerInfo.ApplyConfigArgument;
+            startInfo.UseShellExecute = true;
+            startInfo.Verb = "runas";
             Process.Start(startInfo);
         }
 
