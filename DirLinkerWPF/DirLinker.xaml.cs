@@ -136,14 +136,25 @@ namespace DirLinkerWPF
 
         private void CleanupConfig()
         {
-            HashSet<Configuration.LinkDir> duplicates = new HashSet<Configuration.LinkDir>();
-            foreach (var existing in Config.LinkDirectories.ToArray())
-            foreach (var linkDir in Config.LinkDirectories
-                .Where(it => it.Directory.Equals(existing.Directory))
-                .Where(it => it != existing))
-                duplicates.Add(linkDir);
-            foreach (var it in duplicates)
-                Config.LinkDirectories.Remove(it);
+            Debug.WriteLine("Config before cleanup: " + Config.LinkDirectories.Count);
+
+            for (int existingIndex = 0;
+                existingIndex < Config.LinkDirectories.Count; 
+                existingIndex++)
+            {
+                var existing = Config.LinkDirectories[existingIndex];
+
+                for (int possibleDuplicateIndex = existingIndex + 1;
+                    possibleDuplicateIndex < Config.LinkDirectories.Count;
+                    possibleDuplicateIndex++)
+                {
+                    var possibleDuplicate = Config.LinkDirectories[possibleDuplicateIndex];
+
+                    if (existing.Directory.Equals(possibleDuplicate.Directory))
+                        Config.LinkDirectories.RemoveAt(possibleDuplicateIndex);
+                }
+            }
+            
             Debug.WriteLine("Config after cleanup: " + Config.LinkDirectories.Count);
         }
 
