@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Dynamic;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using DirLinkerConfig;
 using Newtonsoft.Json;
@@ -11,6 +13,16 @@ namespace HardLinkTool
 {
     public class HardLinkTool
     {
+        public static readonly string DataDir;
+        public static readonly string ConfigFile;
+
+        static HardLinkTool()
+        {
+            DataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "org.comroid");
+            ConfigFile = Path.Combine(DataDir, "dirLinker.json");
+            Directory.CreateDirectory(DataDir);
+        }
+
         public static Configuration Config { get; private set; }
 
         public static void Main(string[] args)
@@ -35,11 +47,7 @@ namespace HardLinkTool
         {
             if (args[0].Equals(DirLinkerInfo.ApplyConfigArgument))
             {
-                var data = new string[args.Length - 1];
-                for (int i = 0; i < data.Length; i++)
-                    data[i] = args[i + 1];
-                var value = string.Join(' ', data);
-                Config = JsonConvert.DeserializeObject<Configuration>(value);
+                LoadConfig();
                 ApplyConfig();
                 return;
             }
@@ -83,6 +91,33 @@ namespace HardLinkTool
                     targetDir.CreateSymbolicLink(linkPath);
                 }
             }
+        }
+
+        private static void LoadConfig()
+        {
+            if (File.Exists(ConfigFile))
+            {
+                string data = File.ReadAllText(ConfigFile);
+                Config = JsonConvert.DeserializeObject<Configuration>(data) ?? CreateDefaultConfig();
+            }
+            else Config = CreateDefaultConfig();
+
+            if (Config == null)
+                throw new InvalidDataException("Could not load configuration");
+        }
+
+        private static void SaveConfig()
+        {
+            //ApplyConfigFromUI();
+            var data = JsonConvert.SerializeObject(Config);
+            File.WriteAllText(ConfigFile, data);
+            Debug.WriteLine("Config was saved. Data: " + data);
+        }
+
+        private static Configuration CreateDefaultConfig()
+        {
+            var defaults = new Configuration();
+            return defaults;
         }
     }
 }

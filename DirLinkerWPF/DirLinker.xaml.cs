@@ -19,10 +19,17 @@ namespace DirLinkerWPF
     {
         public const int WindowHeight = 600;
         public const int WindowWidth = 840;
-        public readonly string DataDir;
-        public readonly string ConfigFile;
         public Configuration Config { get; private set; }
         private Dictionary<string, Configuration.LinkDir> _blobs = new Dictionary<string, Configuration.LinkDir>();
+        public static readonly string DataDir;
+        public static readonly string ConfigFile;
+
+        static DirLinker()
+        {
+            DataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "org.comroid");
+            ConfigFile = Path.Combine(DataDir, "dirLinker.json");
+            Directory.CreateDirectory(DataDir);
+        }
 
         public DirLinker()
         {
@@ -32,9 +39,6 @@ namespace DirLinkerWPF
             Height = WindowHeight;
             Width = WindowWidth;
             ResizeMode = ResizeMode.CanMinimize;
-            DataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "org.comroid");
-            Directory.CreateDirectory(DataDir);
-            ConfigFile = Path.Combine(DataDir, "dirLinker.json");
             Closing += (sender, args) => SaveConfig();
 
             try
@@ -53,7 +57,7 @@ namespace DirLinkerWPF
             var startInfo = new ProcessStartInfo()
             {
                 FileName = "HardLinkTool.exe",
-                Arguments = $"{DirLinkerInfo.ApplyConfigArgument} {JsonConvert.SerializeObject(Config)}",
+                Arguments = DirLinkerInfo.ApplyConfigArgument + " \"" + JsonConvert.SerializeObject(Config).Replace("\"","\\\"") + '"',
                 WindowStyle = ProcessWindowStyle.Hidden,
                 UseShellExecute = false,
                 Verb = "runas Administrator"
