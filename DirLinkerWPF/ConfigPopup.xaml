@@ -1,0 +1,28 @@
+﻿<Window x:Class="DirLinkerWPF.ConfigPopup"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DirLinkerWPF"
+        mc:Ignorable="d"
+        Title="Configuration" Height="300" Width="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="1" Text="Configuration File Location" VerticalAlignment="Center" HorizontalAlignment="Center" />
+        <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" IsEnabled="False">
+            <ComboBoxItem Content="AppData" IsSelected="True" />
+            <ComboBoxItem Content="Documents" />
+        </ComboBox>
+
+        <Button Grid.Row="9" Grid.ColumnSpan="9" HorizontalAlignment="Center" VerticalAlignment="Bottom" Content=" Save and Open Configuration File " Margin="0 17" Click="SaveAndOpen" />
+    </Grid>
+</Window>
