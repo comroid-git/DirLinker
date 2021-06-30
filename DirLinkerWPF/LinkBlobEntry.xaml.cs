@@ -70,14 +70,14 @@ namespace DirLinkerWPF
             _window.Button_RemoveBlob(LinkDirEntry.Blob, Blob);
         }
 
-        private void DoEnable(object sender, RoutedEventArgs e)
+        internal void DoEnable(object sender, RoutedEventArgs e)
         {
-            Blob.Enabled = true;
+            EnabledBox.IsChecked = Blob.Enabled = true;
         }
 
-        private void DoDisable(object sender, RoutedEventArgs e)
+        internal void DoDisable(object sender, RoutedEventArgs e)
         {
-            Blob.Enabled = false;
+            EnabledBox.IsChecked = Blob.Enabled = false;
         }
     }
 }

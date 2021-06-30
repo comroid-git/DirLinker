@@ -92,12 +92,18 @@ namespace DirLinkerWPF
 
         private void DoEnable(object sender, RoutedEventArgs e)
         {
-            Blob.Enabled = true;
+            EnabledBox.IsChecked = Blob.Enabled = true;
+            foreach (UIElement each in LinkList.Children)
+                if (each is LinkBlobEntry entry)
+                    entry.DoEnable(sender, e);
         }
 
         private void DoDisable(object sender, RoutedEventArgs e)
         {
-            Blob.Enabled = false;
+            EnabledBox.IsChecked = Blob.Enabled = false;
+            foreach (UIElement each in LinkList.Children)
+                if (each is LinkBlobEntry entry)
+                    entry.DoDisable(sender, e);
         }
     }
 }
