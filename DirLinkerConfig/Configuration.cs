@@ -144,6 +144,8 @@ namespace DirLinkerConfig
             [JsonProperty]
             public string Directory;
             [JsonProperty]
+            public bool Enabled = true;
+            [JsonProperty]
             public List<LinkBlob> Links = new List<LinkBlob>();
             [JsonIgnore]
             public DirectoryInfo Dir
@@ -238,6 +240,8 @@ namespace DirLinkerConfig
             }
             [JsonProperty]
             public string TargetDirectory;
+            [JsonProperty]
+            public bool Enabled = true;
 
             [JsonIgnore]
             public DirectoryInfo TargetDir
