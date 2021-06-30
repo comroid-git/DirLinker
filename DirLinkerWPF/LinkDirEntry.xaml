@@ -18,7 +18,7 @@
             <ColumnDefinition Width="40" />
         </Grid.ColumnDefinitions>
 
-        <CheckBox Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Name="EnabledBox" IsEnabledChanged="ToggleEnabled" />
+        <CheckBox Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Name="EnabledBox" Checked="DoEnable" Unchecked="DoDisable" />
 
         <TextBlock Grid.Row="0" Grid.Column="1" Text="Link Directory:" />
         <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding LinkDirName}" VerticalAlignment="Bottom" />
