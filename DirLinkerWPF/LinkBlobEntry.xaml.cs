@@ -57,6 +57,7 @@ namespace DirLinkerWPF
             Blob = blob;
             LinkName = LinkName;
             TargetName = TargetName;
+            EnabledBox.IsEnabled = blob.Enabled;
         }
 
         private void Button_Edit(object sender, RoutedEventArgs e)
@@ -67,6 +68,11 @@ namespace DirLinkerWPF
         private void Button_Remove(object sender, RoutedEventArgs e)
         {        
             _window.Button_RemoveBlob(LinkDirEntry.Blob, Blob);
+        }
+
+        private void ToggleEnabled(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            Blob.Enabled = !Blob.Enabled;
         }
     }
 }
