@@ -44,6 +44,7 @@ namespace DirLinkerWPF
             ClearView();
             foreach (var each in Blob.Links)
                 AddLinkToView(each.Entry);
+            EnabledBox.IsChecked = Blob.Enabled;
         }
 
         public void ClearView()
@@ -87,6 +88,22 @@ namespace DirLinkerWPF
         private void Button_Remove(object sender, RoutedEventArgs e)
         {
             _window.Button_RemoveDir(this);
+        }
+
+        private void DoEnable(object sender, RoutedEventArgs e)
+        {
+            EnabledBox.IsChecked = Blob.Enabled = true;
+            foreach (UIElement each in LinkList.Children)
+                if (each is LinkBlobEntry entry)
+                    entry.DoEnable(sender, e);
+        }
+
+        private void DoDisable(object sender, RoutedEventArgs e)
+        {
+            EnabledBox.IsChecked = Blob.Enabled = false;
+            foreach (UIElement each in LinkList.Children)
+                if (each is LinkBlobEntry entry)
+                    entry.DoDisable(sender, e);
         }
     }
 }

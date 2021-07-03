@@ -11,18 +11,21 @@
             <RowDefinition Height="0" x:Name="ListRow" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="40" />
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="40" />
             <ColumnDefinition Width="40" />
             <ColumnDefinition Width="40" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="Link Directory:" />
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding LinkDirName}" VerticalAlignment="Bottom" />
+        <CheckBox Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Name="EnabledBox" Checked="DoEnable" Unchecked="DoDisable" />
 
-        <Button Grid.Row="0" Grid.Column="1" Content="Add" Click="Button_AddLink" />
-        <Button Grid.Row="0" Grid.Column="2" Content="Edit" Click="Button_Edit" IsEnabled="False" />
-        <Button Grid.Row="0" Grid.Column="3" Content="Del" Click="Button_Remove" />
+        <TextBlock Grid.Row="0" Grid.Column="1" Text="Link Directory:" />
+        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding LinkDirName}" VerticalAlignment="Bottom" />
+
+        <Button Grid.Row="0" Grid.Column="2" Content="Add" Click="Button_AddLink" />
+        <Button Grid.Row="0" Grid.Column="3" Content="Edit" Click="Button_Edit" IsEnabled="False" />
+        <Button Grid.Row="0" Grid.Column="4" Content="Del" Click="Button_Remove" />
 
         <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="9" Orientation="Vertical" Name="LinkList" />
     </Grid>

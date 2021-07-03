@@ -57,6 +57,7 @@ namespace DirLinkerWPF
             Blob = blob;
             LinkName = LinkName;
             TargetName = TargetName;
+            EnabledBox.IsChecked = blob.Enabled;
         }
 
         private void Button_Edit(object sender, RoutedEventArgs e)
@@ -67,6 +68,16 @@ namespace DirLinkerWPF
         private void Button_Remove(object sender, RoutedEventArgs e)
         {        
             _window.Button_RemoveBlob(LinkDirEntry.Blob, Blob);
+        }
+
+        internal void DoEnable(object sender, RoutedEventArgs e)
+        {
+            EnabledBox.IsChecked = Blob.Enabled = true;
+        }
+
+        internal void DoDisable(object sender, RoutedEventArgs e)
+        {
+            EnabledBox.IsChecked = Blob.Enabled = false;
         }
     }
 }

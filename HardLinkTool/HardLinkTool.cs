@@ -58,15 +58,31 @@ namespace HardLinkTool
                 throw new InvalidDataException("Unknown configuration Version");
 
             foreach (var linkDir in Config.LinkDirectories)
-            foreach (var linkBlob in linkDir.Links)
-                try
+            {
+                if (!linkDir.Enabled)
                 {
-                    new ApplicationBlob(linkDir, linkBlob).Apply();
+                    Console.WriteLine("Skipping disabled directory " + linkDir.Directory);
+                    continue;
                 }
-                catch (Exception ex)
+
+                foreach (var linkBlob in linkDir.Links)
                 {
-                    Console.WriteLine("An exception occurred: " + ex);
+                    if (!linkBlob.Enabled)
+                    {
+                        Console.WriteLine("Skipping disabled entry " + linkBlob.LinkName);
+                        continue;
+                    }
+
+                    try
+                    {
+                        new ApplicationBlob(linkDir, linkBlob).Apply();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("An exception occurred: " + ex);
+                    }
                 }
+            }
 
             Console.WriteLine("Done!");
         }

@@ -90,7 +90,7 @@ namespace DirLinkerWPF
             ReloadView();
         }
 
-        private void CleanupConfig()
+        internal void CleanupConfig()
         {
             Debug.WriteLine("Config before cleanup: " + Config.LinkDirectories.Count);
 
@@ -175,9 +175,7 @@ namespace DirLinkerWPF
         {
             try
             {
-                CleanupConfig();
-                Configuration.SaveConfig();
-                Process.Start("explorer.exe", Configuration.ConfigFile);
+                new ConfigPopup(this).ShowDialog();
             }
             catch (Exception ex)
             {

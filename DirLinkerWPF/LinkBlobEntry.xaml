@@ -12,21 +12,24 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="40" />
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="2.5*" />
             <ColumnDefinition Width="40" />
             <ColumnDefinition Width="40" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="├" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center" />
+        <CheckBox Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Name="EnabledBox" Checked="DoEnable" Unchecked="DoDisable" />
 
-        <TextBlock Grid.Row="0" Grid.Column="1" Text="Link Name:" />
-        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding LinkName}" VerticalAlignment="Bottom" />
+        <TextBlock Grid.Row="0" Grid.Column="1" Text="├" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center" />
 
-        <TextBlock Grid.Row="0" Grid.Column="2" Text="Target:" />
-        <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding TargetName}" VerticalAlignment="Bottom" />
+        <TextBlock Grid.Row="0" Grid.Column="2" Text="Link Name:" />
+        <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding LinkName}" VerticalAlignment="Bottom" />
 
-        <Button Grid.Row="0" Grid.Column="3" Content="Edit" Click="Button_Edit" IsEnabled="False" />
-        <Button Grid.Row="0" Grid.Column="4" Content="Del" Click="Button_Remove" />
+        <TextBlock Grid.Row="0" Grid.Column="3" Text="Target:" />
+        <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding TargetName}" VerticalAlignment="Bottom" />
+
+        <Button Grid.Row="0" Grid.Column="4" Content="Edit" Click="Button_Edit" IsEnabled="False" />
+        <Button Grid.Row="0" Grid.Column="5" Content="Del" Click="Button_Remove" />
     </Grid>
 </UserControl>
