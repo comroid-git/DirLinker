@@ -82,7 +82,8 @@ namespace DirLinkerWPF
 
         private void Button_Edit(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            new LinkDirEdit(Blob).ShowDialog();
+            _window.ReloadView();
         }
 
         private void Button_Remove(object sender, RoutedEventArgs e)
