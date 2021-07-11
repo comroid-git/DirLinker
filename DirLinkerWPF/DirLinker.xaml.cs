@@ -65,19 +65,16 @@ namespace DirLinkerWPF
         {
             var linkDirStr = LinkDirInput.Text;
             var linkDir = new DirectoryInfo(linkDirStr.EndsWith(Path.DirectorySeparatorChar) ? linkDirStr : linkDirStr + Path.DirectorySeparatorChar);
+            var nameStr = LinkNameInput.Text;
             var targetStr = TargetDirInput.Text;
 
-            /*
-            if (!linkDir.Exists)
-                throw new InvalidOperationException("Link parent directory is missing: " + linkDir.FullName);
-            if (link.Exists)
-                throw new InvalidOperationException("Link target already exists: " + link.FullName);
-            if (!targetDir.Exists)
-                throw new InvalidOperationException("Link target directory is missing: " + targetDir.FullName);
-            */
+            if (!nameStr.Contains('.') && targetStr.EndsWith(Path.DirectorySeparatorChar))
+            {
+                throw new ArgumentException("The link name targetting a File must contain a file ending");
+            }
 
             var dirEntry = Config.GetOrCreate(linkDir.FullName);
-            var linkEntry = dirEntry.GetOrCreate(LinkNameInput.Text, targetStr);
+            var linkEntry = dirEntry.GetOrCreate(nameStr, targetStr);
 
             LinkDirInput.Text = "";
             LinkDirInput.IsEnabled = true;
