@@ -31,6 +31,12 @@ namespace DirLinkerWPF
             typeof(LinkBlobEntry),
             new PropertyMetadata(null)
         );
+        public static readonly DependencyProperty IsFileProperty = DependencyProperty.Register(
+            "IsFile",
+            typeof(bool),
+            typeof(LinkBlobEntry),
+            new PropertyMetadata(null)
+        );
 
         private readonly DirLinker _window;
         public readonly LinkDirEntry LinkDirEntry;
@@ -44,8 +50,18 @@ namespace DirLinkerWPF
         }
         public string TargetName
         {
-            get => Blob.TargetDirectory;
-            set => SetValue(TargetNameProperty, Blob.TargetDirectory = value);
+            get => Blob.TargetPath;
+            set => SetValue(TargetNameProperty, Blob.TargetPath = value);
+        }
+
+        public bool IsFile
+        {
+            get
+            {
+                var f = !Blob?.IsDirectory ?? false;
+                SetValue(IsFileProperty, f);
+                return f;
+            }
         }
 
         public LinkBlobEntry(DirLinker window, Configuration.LinkDir linkDirEntry, Configuration.LinkBlob blob)

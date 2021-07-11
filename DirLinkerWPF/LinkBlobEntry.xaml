@@ -17,6 +17,7 @@
             <ColumnDefinition Width="2.5*" />
             <ColumnDefinition Width="40" />
             <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="40" />
         </Grid.ColumnDefinitions>
 
         <CheckBox Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Name="EnabledBox" Checked="DoEnable" Unchecked="DoDisable" />
@@ -29,7 +30,12 @@
         <TextBlock Grid.Row="0" Grid.Column="3" Text="Target:" />
         <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding TargetName}" VerticalAlignment="Bottom" />
 
-        <Button Grid.Row="0" Grid.Column="4" Content="Edit" Click="Button_Edit" IsEnabled="False" />
-        <Button Grid.Row="0" Grid.Column="5" Content="Del" Click="Button_Remove" />
+        <StackPanel Grid.Row="0" Grid.Column="4">
+            <TextBlock Text="File?" />
+            <CheckBox IsEnabled="False" IsChecked="{Binding IsFile}" />
+        </StackPanel>
+
+        <Button Grid.Row="0" Grid.Column="5" Content="Edit" Click="Button_Edit" IsEnabled="False" />
+        <Button Grid.Row="0" Grid.Column="6" Content="Del" Click="Button_Remove" />
     </Grid>
 </UserControl>

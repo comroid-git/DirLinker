@@ -66,7 +66,6 @@ namespace DirLinkerWPF
             var linkDirStr = LinkDirInput.Text;
             var linkDir = new DirectoryInfo(linkDirStr.EndsWith(Path.DirectorySeparatorChar) ? linkDirStr : linkDirStr + Path.DirectorySeparatorChar);
             var targetStr = TargetDirInput.Text;
-            var targetDir = new DirectoryInfo(targetStr.EndsWith(Path.DirectorySeparatorChar) ? targetStr : targetStr + Path.DirectorySeparatorChar);
 
             /*
             if (!linkDir.Exists)
@@ -78,7 +77,7 @@ namespace DirLinkerWPF
             */
 
             var dirEntry = Config.GetOrCreate(linkDir.FullName);
-            var linkEntry = dirEntry.GetOrCreate(LinkNameInput.Text, targetDir);
+            var linkEntry = dirEntry.GetOrCreate(LinkNameInput.Text, targetStr);
 
             LinkDirInput.Text = "";
             LinkDirInput.IsEnabled = true;

@@ -164,7 +164,7 @@ namespace DirLinkerConfig
                 return Links.FirstOrDefault(e => e.LinkName.Equals(name));
             }
             
-            public LinkBlob GetOrCreate(string name, DirectoryInfo directory)
+            public LinkBlob GetOrCreate(string name, string directory)
             {
                 var find = Find(name);
                 if (find != null)
@@ -173,7 +173,7 @@ namespace DirLinkerConfig
                 }
                 Debug.WriteLine("Warning: Could not find LinkBlob " + name);
 
-                var blob = new LinkBlob(this) { LinkName = name, TargetDir = directory };
+                var blob = new LinkBlob(this) { LinkName = name, TargetPath = directory };
                 Add(blob);
                 return blob;
             }
@@ -239,15 +239,26 @@ namespace DirLinkerConfig
                 set => _linkName = value;
             }
             [JsonProperty]
-            public string TargetDirectory;
+            public string TargetPath;
             [JsonProperty]
             public bool Enabled = true;
+
+
+            [JsonIgnore]
+            public bool IsDirectory => TargetPath.EndsWith(Path.DirectorySeparatorChar);
 
             [JsonIgnore]
             public DirectoryInfo TargetDir
             {
-                get => new DirectoryInfo(TargetDirectory);
-                set => TargetDirectory = value.FullName;
+                get => new DirectoryInfo(TargetPath);
+                set => TargetPath = value.FullName;
+            }
+
+            [JsonIgnore]
+            public FileInfo TargetFile
+            {
+                get => new FileInfo(TargetPath);
+                set => TargetPath = value.FullName;
             }
 
             [JsonIgnore]
@@ -271,7 +282,7 @@ namespace DirLinkerConfig
                 if (newData != null)
                 {
                     LinkName = newData.LinkName;
-                    TargetDirectory = newData.TargetDirectory;
+                    TargetPath = newData.TargetPath;
                 }
             }
         }
