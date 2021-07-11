@@ -164,7 +164,7 @@ namespace DirLinkerConfig
                 return Links.FirstOrDefault(e => e.LinkName.Equals(name));
             }
             
-            public LinkBlob GetOrCreate(string name, string directory)
+            public LinkBlob GetOrCreate(string name, string target)
             {
                 var find = Find(name);
                 if (find != null)
@@ -173,7 +173,7 @@ namespace DirLinkerConfig
                 }
                 Debug.WriteLine("Warning: Could not find LinkBlob " + name);
 
-                var blob = new LinkBlob(this) { LinkName = name, TargetPath = directory };
+                var blob = new LinkBlob(this) { LinkName = name, TargetPath = target };
                 Add(blob);
                 return blob;
             }
@@ -230,14 +230,9 @@ namespace DirLinkerConfig
             {
                 DirBlob = dirBlob;
             }
-
-            private string _linkName;
-            [JsonProperty]
-            public string LinkName
-            {
-                get => _linkName ?? TargetDir.Name;
-                set => _linkName = value;
-            }
+            
+            [JsonProperty] 
+            public string LinkName;
             [JsonProperty]
             public string TargetPath;
             [JsonProperty]

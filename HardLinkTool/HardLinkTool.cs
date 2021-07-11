@@ -103,13 +103,13 @@ namespace HardLinkTool
                 return new DirectoryInfo(dirName);
             }
         }
-        internal DirectoryInfo Target => Blob.TargetDir;
+        internal string Target => Blob.TargetPath;
 
         internal ApplicationBlob(Configuration.LinkDir dir, Configuration.LinkBlob blob)
         {
             Dir = dir;
             Blob = blob;
-            Console.WriteLine($"Configuring symlink: {Link.FullName} --> {Target.FullName}");
+            Console.WriteLine($"Configuring symlink: {Link.FullName} --> {Target}");
         }
 
         internal void Apply()
@@ -124,8 +124,8 @@ namespace HardLinkTool
                     return;
                 }
                 // move the directory to target position and create symlink
-                Console.WriteLine($"Need to move link source {Link.FullName} to target directory {Target.FullName}");
-                FileSystem.CopyDirectory(Link.FullName, Target.FullName);
+                Console.WriteLine($"Need to move link source {Link.FullName} to target directory {Target}");
+                FileSystem.CopyDirectory(Link.FullName, Target);
                 CreateSymlink(true);
                 return;
             }
