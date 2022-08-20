@@ -32,6 +32,12 @@ namespace DirLinkerWPF
 
             try
             {
+                if (!File.Exists(Configuration.ConfigFile))
+                {
+                    // ask the user to use config from a host; e.g. onedrive
+                    // todo
+                }
+                
                 Configuration.LoadConfig(this);
                 CleanupConfig();
             }
