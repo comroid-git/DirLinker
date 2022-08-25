@@ -35,9 +35,8 @@ namespace DirLinkerWPF
                 if (!File.Exists(Configuration.ConfigFile))
                 {
                     // ask the user to use config from a host; e.g. onedrive
-                    // todo
+                    TryLinkConfig();
                 }
-                
                 Configuration.LoadConfig(this);
                 CleanupConfig();
             }
@@ -53,6 +52,67 @@ namespace DirLinkerWPF
         {
             HaltConsoleBtn.Content = PauseConsolePrefix + (Config.PauseConsole ? "✔ yes" : "❌ no");
             ReloadView();
+        }
+
+        private void TryLinkConfig()
+        {
+            Window[] window = new Window[1];
+            Button yesBtn = new Button()
+            {
+                Content = "Yes"
+            };
+            Button noBtn = new Button()
+            {
+                Content = "No"
+            };
+            yesBtn.Click += (sender, args) =>
+            {
+                CreateOneDriveConfigLink();
+                window[0].Close();
+            };
+            noBtn.Click += (sender, args) => window[0].Close();
+            window[0] = new Window()
+            {
+                Height = 360,
+                Width = 800,
+                Title = "DirLinker - Create configuration link?",
+                Content = new StackPanel()
+                {
+                    Orientation = Orientation.Vertical,
+                    Children =
+                    {
+                        new TextBlock()
+                        {
+                            HorizontalAlignment = HorizontalAlignment.Stretch,
+                            VerticalAlignment = VerticalAlignment.Stretch,
+                            TextAlignment = TextAlignment.Center,
+                            Text = "Do you want to link configuration to OneDrive?"
+                        },
+                        new StackPanel()
+                        {
+                            Orientation = Orientation.Horizontal,
+                            Children =
+                            {
+                                yesBtn,
+                                noBtn
+                            }
+                        }
+                    }
+                }
+            };
+            window[0].ShowDialog();
+        }
+
+        private void CreateOneDriveConfigLink()
+        {
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = "HardLinkTool.exe",
+                Arguments = DirLinkerInfo.CreateConfigLink + ' ' + DirLinkerInfo.HaltOnErrorOnly,
+                UseShellExecute = true,
+                Verb = "runas"
+            };
+            Process.Start(startInfo)!.WaitForExit();
         }
 
         private void ApplyConfigToOS()
@@ -138,7 +198,7 @@ namespace DirLinkerWPF
             new Window
             {
                 Height = 260,
-                Width = 800,
+                Width = 1200,
                 Content = new TextBlock
                 {
                     HorizontalAlignment = HorizontalAlignment.Stretch,

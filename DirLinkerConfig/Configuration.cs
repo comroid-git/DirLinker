@@ -12,7 +12,20 @@ namespace DirLinkerConfig
     public static class DirLinkerInfo
     {
         public const string ApplyConfigArgument = "--applyConfig";
+        public const string CreateConfigLink = "--createConfigLink";
         public const string HaltOnErrorOnly = "--haltOnErrorOnly";
+
+        public static void MkDirs(this FileInfo file)
+        {
+            if (!file.Directory?.Exists ?? false)
+                file.Directory.MkDirs();
+        }
+
+        public static void MkDirs(this DirectoryInfo dir)
+        {
+            if (!dir.Parent?.Exists ?? false)
+                dir.Create();
+        }
     }
 
     public class Configuration : IUpdateable<Configuration>
@@ -26,7 +39,13 @@ namespace DirLinkerConfig
         static Configuration()
         {
             DataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "org.comroid");
-            ConfigFile = Path.Combine(DataDir, "dirLinker.json");
+            ConfigFile = Path.Combine(DataDir,
+#if DEBUG
+                "dirLinker-debug.json"
+#else
+                "dirLinker.json"
+#endif
+            );
             Directory.CreateDirectory(DataDir);
         }
 
