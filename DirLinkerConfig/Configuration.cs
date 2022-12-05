@@ -11,8 +11,6 @@ namespace DirLinkerConfig
 {
     public static class DirLinkerInfo
     {
-        public const string ApplyConfigArgument = "--applyConfig";
-        public const string CreateConfigLink = "--createConfigLink";
         public const string HaltOnErrorOnly = "--haltOnErrorOnly";
 
         public static void MkDirs(this FileInfo file)
@@ -38,7 +36,7 @@ namespace DirLinkerConfig
 
         static Configuration()
         {
-            DataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "org.comroid");
+            DataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "comroid", "DirLinker");
             ConfigFile = Path.Combine(DataDir,
 #if DEBUG
                 "dirLinker-debug.json"

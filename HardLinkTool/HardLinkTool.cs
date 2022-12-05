@@ -40,35 +40,8 @@ namespace HardLinkTool
 
         private static void Run(string[] args)
         {
-            if (args.Contains(DirLinkerInfo.CreateConfigLink))
-            {
-                try
-                {
-                    var targetFile = Path.Combine(
-                        Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "OneDrive", "config",
-                        "org.comroid");
-                    var target = new FileInfo(targetFile);
-                    if (target.Exists && target.IsSymbolicLink() && target.IsSymbolicLinkValid())
-                    {
-                        Console.WriteLine("Skipping creation of config symlink because a symlink already exists");
-                        return;
-                    }
-                    target.MkDirs();
-                    target.Create();
-                    Console.WriteLine($"Creating configuration link from {Configuration.ConfigFile} to {targetFile}");
-                    target.CreateSymbolicLink(Configuration.ConfigFile);
-                }
-                catch (UnauthorizedAccessException _)
-                {
-                }
-            }
-            else if (args.Contains(DirLinkerInfo.ApplyConfigArgument))
-            {
-                Configuration.LoadConfig();
-                ApplyConfig();
-            }
-
-            // handle other arguments
+            Configuration.LoadConfig();
+            ApplyConfig();
         }
 
         private static void ApplyConfig()
